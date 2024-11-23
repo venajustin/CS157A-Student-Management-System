@@ -22,16 +22,19 @@ public class HelloServlet extends HttpServlet {
 
             var stmt = conn.createStatement();
             log("executing query: " + stmt);
-            stmt.execute("INSERT INTO testing.test1 " +
+            stmt.execute("INSERT INTO test1 " +
                     "VALUES (" +
-                    "(SELECT MAX(count) FROM testing.test1)," +
+                    "(SELECT MAX(count) FROM test1) + 1," +
                     "current_time);");
 
             log("query executed");
+            
             conn.close();
+            message = "query sent";
 
         } catch (Exception e) {
             System.out.println(e);
+            message = "exception occurred";
         }
 
 

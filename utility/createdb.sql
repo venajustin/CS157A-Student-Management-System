@@ -1,15 +1,13 @@
 CREATE DATABASE StudentManagementSystem
     WITH OWNER smsdeveloper;
 
-CREATE SCHEMA testing;
-
-DROP TABLE testing.test1;
-CREATE TABLE testing.test1 (
+DROP TABLE test1;
+CREATE TABLE test1 (
     count INT,
     time TIME
 );
 
-INSERT INTO testing.test1
+INSERT INTO test1
     VALUES (1, CURRENT_TIME);
 
-SELECT * FROM testing.test1;
+SELECT * FROM test1;
