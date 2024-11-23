@@ -30,4 +30,43 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
    2. It is always best practice to create a new user for each application that is connecting to the database.
    3. In `psql` run `CREATE USER smsdeveloper CREATEDB CREATEROLE WITH PASSWORD <your password here>;`
 4. Clone this repo somewhere (not inside of Tomcat folder)
- 
+5. On visual studio code, install two extensions
+   1. **Extension Pack for Java** from Microsoft
+   2. **Community Server Connectors** from Red Hat
+6. Download the [Postgresql JDBC driver](https://jdbc.postgresql.org/download/). You should probably select the Java 8 driver which will work on versions newer than 8.
+7. Under `/src/main/webapp/` you will need to create a directory `META-INF` containing a `lib` directory and `context.xml`.
+    This will contain the database configuration and driver that you wish to use. 
+    The driver jar that was downloaded in step 6 will be placed in the `lib` directory, the structure should look like this:
+    ```
+    src/
+        main/
+            java/
+            webapp/
+                META-INF/
+                    lib/
+                        postgresql-42.7.4.jar
+                    context.xml
+                WEB-INF/
+                index.jsp
+        target/
+    ...
+    ```
+    The `context.xml` file will contain the connection information for your local postgresql database. The following context should work as long as `<password>` is replaced with the password given to the `smsdeveloper` user.
+    ```xml title="context.xml"
+    <Context>
+        <Resource
+            name="jdbc/MyPostgresDB"
+            auth="Container"
+            type="javax.sql.DataSource"
+            factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+            driverClassName="org.postgresql.Driver"
+            url="jdbc:postgresql://localhost:5432/studentmanagementsystem"
+            username="smsdeveloper"
+            password="<password>"
+            maxActive="20"
+            maxIdle="10"
+            minIdle="2"
+            initialSize="5"
+        />
+    </Context>
+    ```
