@@ -27,8 +27,15 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
    6. Additional configuration may be needed to get this working, I would suggest making sure this runs before proceeding.
 3. Install [Postgresql](https://www.postgresql.org/download/) database management server
    1. During install set the postgres user password to something secure and **do not share this.** You can leave the port as default, it should be `5432`.
-   2. It is always best practice to create a new user for each application that is connecting to the database.
-   3. In `psql` run `CREATE USER smsdeveloper CREATEDB CREATEROLE WITH PASSWORD <your password here>;`
+   2. It is always best practice to create a new user for each application that is connecting to the database. Heres how to do that:
+        1. Open powershell or some cmd prompt.
+      2. Execute `psql -U postgres`, enter the password assigned at install
+      3. Execute this and set the password to **something other than your postgres user password**
+      `CREATE USER smsdeveloper WITH PASSWORD '<password>' CREATEDB CREATEUSER`
+      4. Create the database for this project with `CREATE DATABASE smsdb WITH OWNER smsdeveloper`.
+      5. Exit the psql console with `\q`
+      6. Log in as the new user with `psql -U smsdeveloper -d smsdb`
+      7. Copy and paste the test table creation scripts found in `utility/createdb.sql`. You can probably copy and paste the entire file and then press enter to run the last one. You will get a result of a single row looking something like `1 | <current time>`.
 4. Clone this repo somewhere (not inside of Tomcat folder)
 5. On visual studio code, install two extensions
    1. **Extension Pack for Java** from Microsoft
@@ -60,7 +67,7 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
             type="javax.sql.DataSource"
             factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
             driverClassName="org.postgresql.Driver"
-            url="jdbc:postgresql://localhost:5432/studentmanagementsystem"
+            url="jdbc:postgresql://localhost:5432/smsdb"
             username="smsdeveloper"
             password="<password>"
             maxActive="20"
@@ -70,9 +77,7 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
         />
     </Context>
     ```
-8. In the Maven plugin menu, right click on the server and select `Run Maven Commands > Install`.
-    ![image showing the location of the Maven plugin menu](.github/images/maven-compile.png)
-    Hopefully this compiles without errors.
+8. In the visual studio code console run `./mvnw clean compile install`
 9. Under the `SERVERS` tab, the Community Server Connector can be set up.
     1. Right click `Community Server Connector` and select `Create New Server...`
    2. Choose `No, use server on disk`
@@ -82,4 +87,6 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
     If this isn't there, try running `./mvnw clean install` from a terminal in the project folder.
 11. Right-click on `CS157A-StudentManagement-System-1.0-SNAPSHOT.war`. Select `Run on Server`. Choose `Tomcat 10.x`, and `No` to edit parameters.
 12. The server can be started, stopped, and restarted through the `servers` menu on visual studio code.
- 
+13. To update changes the easiest way is through two steps
+    1. Run `./mvnw clean compile install` in the command line
+    2. Right-click the tomcat server under `SERVERS` menu and click `Restart in Run Mode`
