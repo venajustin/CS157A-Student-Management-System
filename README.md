@@ -70,3 +70,16 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
         />
     </Context>
     ```
+8. In the Maven plugin menu, right click on the server and select `Run Maven Commands > Install`.
+    ![image showing the location of the Maven plugin menu](.github/images/maven-compile.png)
+    Hopefully this compiles without errors.
+9. Under the `SERVERS` tab, the Community Server Connector can be set up.
+    1. Right click `Community Server Connector` and select `Create New Server...`
+   2. Choose `No, use server on disk`
+   3. Navigate to the location of your Apache Tomcat installation
+   4. Scroll down and click `Finish`, these settings should be automatically populated correctly.
+10. In the `target/` directory you should find `CS157-StudentManagement-System-1.0-SNAPSHOT.war`
+    If this isn't there, try running `./mvnw clean install` from a terminal in the project folder.
+11. Right-click on `CS157A-StudentManagement-System-1.0-SNAPSHOT.war`. Select `Run on Server`. Choose `Tomcat 10.x`, and `No` to edit parameters.
+12. The server can be started, stopped, and restarted through the `servers` menu on visual studio code.
+ 
