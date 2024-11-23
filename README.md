@@ -26,7 +26,7 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
    5. If everything worked correctly you should see an Apache Tomcat home page that says "If you're seeing this, you've successfully installed Tomcat. Congratulations!"
    6. Additional configuration may be needed to get this working, I would suggest making sure this runs before proceeding.
 3. Install [Postgresql](https://www.postgresql.org/download/) database management server
-    1. After installing you will need to set the postgres user password, make this secure
+   1. During install set the postgres user password to something secure and **do not share this.** You can leave the port as default, it should be `5432`.
    2. It is always best practice to create a new user for each application that is connecting to the database.
    3. In `psql` run `CREATE USER smsdeveloper CREATEDB CREATEROLE WITH PASSWORD <your password here>;`
 4. Clone this repo somewhere (not inside of Tomcat folder)
