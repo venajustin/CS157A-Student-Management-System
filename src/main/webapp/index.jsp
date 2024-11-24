@@ -3,11 +3,14 @@
 <html>
 <head>
     <title>JSP - Hello World</title>
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+    <link rel="stylesheet" type="text/css" href="static/style.css"/>
 </head>
 <body>
-<h1><%= "Hello World!" %>
+<h1>DB connection demo
 </h1>
 <br/>
-<a href="hello-servlet">Hello Servlet</a>
+    Current count: <span id="count-span"></span>
+    <button hx-post="${pageContext.request.contextPath}/increment-test" hx-target="#count-span" hx-swap="innerHTML">Increment</button>
 </body>
 </html>
