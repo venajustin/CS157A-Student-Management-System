@@ -78,15 +78,26 @@ CREATE TABLE Sections (
 -- Prerequisites
 CREATE TABLE Prerequisites (
     id SERIAL PRIMARY KEY,
-    courseId INT,
-    requiresId INT,
-    CONSTRAINT 
+    courseDept CHAR(5),
+    courseNum INT,
+    requiresDept CHAR(5),
+    requiresNum INT,
+    CONSTRAINT fk_course
+                           FOREIGN KEY (courseDept, courseNum)
+                           REFERENCES Courses(dept, number),
+    CONSTRAINT fk_require
+                           FOREIGN KEY (requiresDept, requiresNum)
+                           REFERENCES Courses(dept, number)
 );
 
---Faculty
+--Faculty - Will be able to modify all classes and assign professors
+CREATE TABLE Faculty (
+    employeeId SERIAL PRIMARY KEY,
+    name TEXT,
+    email TEXT
+);
 
-
--- Professors
+-- Professors - Will be able to modify classes they are assigned too and drop students / assign grades
 CREATE TABLE Professors (
     employeeId SERIAL PRIMARY KEY,
     name TEXT,
@@ -98,8 +109,44 @@ CREATE TABLE Professors (
 
 );
 
-
-
 -- Students
--- Teaches
+CREATE TABLE Students (
+    studentId SERIAL PRIMARY KEY,
+    name TEXT,
+    email TEXT,
+    birthdate DATE,
+    major TEXT,
+    minor TEXT,
+    gpa REAL,
+    unitsCompleted INT
+);
+
+-- Teaches - Maps teachers to the classes they teach
+CREATE TABLE Teaches (
+   id SERIAL PRIMARY KEY,
+   courseDept CHAR(5),
+   courseNum INT,
+   teacher INT,
+   CONSTRAINT fk_course
+       FOREIGN KEY (courseDept, courseNum)
+           REFERENCES Courses(dept, number),
+   CONSTRAINT fk_teacher
+        FOREIGN KEY (teacher)
+        REFERENCES Professors(employeeId),
+    CONSTRAINT one_instructor -- Remove this to allow for multiple teachers to teach one class
+        UNIQUE (courseDept, courseNum)
+);
+
 -- Enrollments
+CREATE TABLE Enrollments (
+    id SERIAL PRIMARY KEY,
+    courseDept CHAR(5),
+    courseNum INT,
+    student INT,
+    CONSTRAINT fk_course
+         FOREIGN KEY (courseDept, courseNum)
+         REFERENCES Courses(dept, number),
+    CONSTRAINT fk_student
+        FOREIGN KEY (student)
+        REFERENCES Students(studentId)
+);
