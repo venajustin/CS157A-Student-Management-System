@@ -9,6 +9,7 @@ INSERT INTO test1
 
 SELECT * FROM test1;
 
+SELECT count FROM test1 ORDER BY test1.time DESC LIMIT 1;
 
 
 DROP TABLE test1;
