@@ -10,6 +10,9 @@ INSERT INTO test1
 SELECT * FROM test1;
 
 
+
+DROP TABLE test1;
+
 -- Setting up Project Tables
 
 -- Quick Clear of all tables, ordered so each runs without conflict
@@ -89,6 +92,10 @@ CREATE TABLE Prerequisites (
                            FOREIGN KEY (requiresDept, requiresNum)
                            REFERENCES Courses(dept, number)
 );
+
+-- Index on prerequisites because there will be a lot of recursive prerequisite checks that will look up by course dept + number often
+CREATE INDEX IF NOT EXISTS ind_course ON
+    Prerequisites (courseDept, courseNum);
 
 --Faculty - Will be able to modify all classes and assign professors
 CREATE TABLE Faculty (
