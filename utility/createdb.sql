@@ -101,16 +101,18 @@ CREATE INDEX IF NOT EXISTS ind_course ON
 --Faculty - Will be able to modify all classes and assign professors
 CREATE TABLE Faculty (
     employeeId SERIAL PRIMARY KEY,
-    name TEXT,
-    email TEXT
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
 );
 
 -- Professors - Will be able to modify classes they are assigned too and drop students / assign grades
 CREATE TABLE Professors (
     employeeId SERIAL PRIMARY KEY,
-    name TEXT,
+    name TEXT NOT NULL,
     dept CHAR(5),
-    email TEXT,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
     CONSTRAINT fk_department
                         FOREIGN KEY (dept)
                         REFERENCES Departments(abbr)
@@ -120,8 +122,9 @@ CREATE TABLE Professors (
 -- Students
 CREATE TABLE Students (
     studentId SERIAL PRIMARY KEY,
-    name TEXT,
-    email TEXT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
     birthdate DATE,
     major TEXT,
     minor TEXT,

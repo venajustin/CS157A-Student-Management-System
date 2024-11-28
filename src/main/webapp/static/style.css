@@ -1,5 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+html, body {
+    height: 100%;
+}
 
 body {
-    background-color: antiquewhite;
+
+    background-color: floralwhite;
 }
+
+#header {
+    background-color: black;
+}
+#header > h1 {
+    color: white;
+    padding: 5px;
+}
+
+#page-container {
+    display: flex;
+    align-content: space-between;
+    height: 100%;
+}
+
+
+#sidebar {
+    margin-right: 15px;
+    width: 70px;
+    height: 100%;
+    border-right-style: solid;
+    border-color: black;
+    border-width: 2px;
+    background-color:white;
+}
+#sidebar.wide {
+    width: 200px;
+}
+.sidebar-option {
+    background-color: #bfdeff;
+    padding: 5px;
+    margin: 5px;
+    border-color: black;
+    background-clip: padding-box;
+    border-radius: 5px;
+    border-width: 2px;
+    border-style: solid;
+    display:flex;
+    align-items: center;
+    min-width: 55px;
+
+}
+#sidebar a {
+    text-decoration: none;
+    color: black;
+}
+.sidebar-option:hover {
+    background-color: #98b1cc;
+
+}
+.sidebar-option-text {
+    display: none;
+    padding-left: 10px;
+}
+#sidebar.wide .sidebar-option-text {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#content {
+    width: 100%;
+}
+
+.sidebar-option.sidebar-title {
+    justify-content: space-between;
+    background-color: transparent;
+    border-style: none;
+}
+
+#collapse-sidebar {
+    background-color: #bfdeff;
+    width: 40px;
+    height: 40px;
+    font-weight: bold;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 2px;
+    border-color:black;
+}
+#collapse-sidebar:hover {
+    background-color: #98b1cc;
+}
+
+#account-error {
+    color: red;
+    text-decoration: underline;
+}
+
