@@ -88,7 +88,7 @@ public class signup extends HttpServlet {
             }
 
             System.out.println("Name: " + name + " CREATED AN ACCOUNT");
-            System.out.println(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api/accounts/")));
+            //System.out.println(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api/accounts/")));
             res.setHeader("HX-Redirect",req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api/accounts/")));
 
             //res.sendRedirect(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api/accounts/")));

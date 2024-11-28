@@ -36,9 +36,19 @@ body {
     border-color: black;
     border-width: 2px;
     background-color:white;
+    transition: .5s cubic-bezier(.36,-0.01,0,.77);
+}
+@keyframes slide-sidebar {
+    from { width: 70px; }
+    to { width: 200px; }
+}
+@keyframes slide-sidebar-text {
+    from {width: 0%; }
+    to {width: 100%; }
 }
 #sidebar.wide {
     width: 200px;
+
 }
 .sidebar-option {
     background-color: #bfdeff;
@@ -63,10 +73,16 @@ body {
 
 }
 .sidebar-option-text {
-    display: none;
+    transform: scaleX(0.0);
+    transform-origin: left center;
+    width: 0;
     padding-left: 10px;
+    transition: transform .5s;
 }
+
 #sidebar.wide .sidebar-option-text {
+    transform: scaleX(1.0);
+    width: 100%;
     display: inline-block;
     font-size: 14px;
     font-weight: bold;
