@@ -1,0 +1,35 @@
+<form id="f-update-user-info" hx-post="${post-destination}">
+    <h1>
+        Student Info
+    </h1>
+    <label>
+        Student id: <span style="font-weight: bold;">${id}</span>
+    </label>
+    <br>
+    <label>
+        Name:
+        <input name="name" type="text" value="${name}"/>
+    </label>
+    <br>
+    <label>
+        Email:
+        <input name="email" type="text" value="${email}"/>
+    </label>
+    <br>
+    <label>
+        Birthdate: ${birthdate}
+<!--    Too hard to do right now    <input name="birthdate" type="text" value="${birthdate}"/>-->
+    </label>
+    <br>
+    <label>
+        Major of Study:
+        <input name="major" type="text" value="${major}"/>
+    </label>
+    <br>
+    <label>
+        Declared minor:
+        <input name="minor" type="text" value="${minor}"/>
+    </label>
+    <br>
+    <button type="submit">SAVE CHANGES</button>
+</form>

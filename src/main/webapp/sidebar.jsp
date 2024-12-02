@@ -9,7 +9,7 @@
     </button>
   </div>
 
-  <a href="https://google.com">
+  <a href="${pageContext.request.contextPath}/student/home.jsp">
     <div class="sidebar-option">
       <img
               src="${pageContext.request.contextPath}/static/icons/house.png"
@@ -22,7 +22,7 @@
       </div>
     </div>
   </a>
-  <a href="https://google.com">
+  <a href="${pageContext.request.contextPath}/student/home.jsp">
     <div class="sidebar-option">
       <img
               src="${pageContext.request.contextPath}/static/icons/calender.png"
@@ -35,7 +35,7 @@
                     </span>
     </div>
   </a>
-  <a href="https://google.com">
+  <a href="${pageContext.request.contextPath}/student/classSearch.jsp">
     <div class="sidebar-option">
       <img
               src="${pageContext.request.contextPath}/static/icons/search.png"

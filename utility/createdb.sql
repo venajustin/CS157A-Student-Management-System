@@ -50,7 +50,7 @@ CREATE TABLE Sessions (
 CREATE TABLE Courses (
     number INT,
     dept CHAR(5),
-    name TEXT,
+    name TEXT NOT NULL,
     description TEXT,
     units INTEGER,
     CONSTRAINT id_abbrev_number
