@@ -15,10 +15,23 @@ body {
 
 #header {
     background-color: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 #header > h1 {
     color: white;
     padding: 5px;
+}
+#header > .header-name {
+    color:white;
+    margin-right: 10px;
+    float: right;
+}
+.header-name > button {
+    background-color: lightgrey;
+    margin-left: 10px;
 }
 
 #page-container {

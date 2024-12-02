@@ -63,8 +63,11 @@ public class login extends HttpServlet {
             // Redirecting to home page
             out.println("Successfully logged in");
             var url = req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api/accounts/"));
-            res.setHeader("HX-Redirect", url);
-            //res.sendRedirect(url);
+            if (req.getHeader("HX-Request") != null && req.getHeader("HX-Request").compareTo("true") == 0) {
+                res.setHeader("HX-Redirect", url);
+            } else {
+                res.sendRedirect(url);
+            }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

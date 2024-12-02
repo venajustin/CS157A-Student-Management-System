@@ -11,11 +11,13 @@
         </h1>
     </div>
     <div id="page-container">
-        <%@ include file="sidebar.jsp"%>
+<%--        <%@ include file="sidebar.jsp"%>--%>
         <div id="content">
-            Test
-            <a href="${pageContext.request.contextPath}/accounts/signup.jsp">signup</a>
-            <a href="${pageContext.request.contextPath}/accounts/login.jsp">login</a>
+            <H2 hx-get="${pageContext.request.contextPath}/api/identify" hx-trigger="load" >
+                <a href="${pageContext.request.contextPath}/accounts/signup.jsp">signup</a> <br>
+                <a href="${pageContext.request.contextPath}/accounts/login.jsp">login</a>
+            </H2>
+
         </div>
     </div>
 
