@@ -1,4 +1,6 @@
-<tr>
+<tr hx-trigger="click" hx-post="${url}" hx-target="#course-search-results" hx-include="this">
+  <input type="hidden" name="department" value="${abbr}"/>
+  <input type="hidden" name="number" value="${courseid}"/>
   <td>${abbr} ${courseid}</td>
   <td>${name}</td>
   <td>${units}</td>

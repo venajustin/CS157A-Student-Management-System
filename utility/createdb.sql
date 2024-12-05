@@ -1,19 +1,4 @@
 
-CREATE TABLE test1 (
-    count INT,
-    time TIME
-);
-
-INSERT INTO test1
-    VALUES (1, CURRENT_TIME);
-
-SELECT * FROM test1;
-
-SELECT count FROM test1 ORDER BY test1.time DESC LIMIT 1;
-
-
--- DROP TABLE test1;
-
 -- Setting up Project Tables
 
 -- Quick Clear of all tables, ordered so each runs without conflict
@@ -27,7 +12,6 @@ DROP TABLE Sections;
 DROP TABLE Courses;
 DROP TABLE Sessions;
 DROP TABLE Departments;
-
 
 
 -- Departments
@@ -62,6 +46,7 @@ CREATE TABLE Courses (
 
 -- Sections
 CREATE TABLE Sections (
+    sectionCode SERIAL PRIMARY KEY,
     dept CHAR(5),
     course INT,
     session INT NOT NULL,
@@ -161,3 +146,4 @@ CREATE TABLE Enrollments (
         FOREIGN KEY (student)
         REFERENCES Students(studentId)
 );
+
