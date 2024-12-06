@@ -32,6 +32,7 @@ public class HelloServlet extends HttpServlet {
             conn.close();
             message = "query sent";
 
+            conn.close();
         } catch (Exception e) {
             System.out.println(e);
             message = "exception occurred";

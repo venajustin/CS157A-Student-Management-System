@@ -40,7 +40,7 @@ public class GetUserName extends HttpServlet {
 
                 }
 
-
+                conn.close();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 out.println("ERROR in backend");

@@ -4,15 +4,16 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- Setting up Project Tables
 
 -- Quick Clear of all tables, ordered so each runs without conflict
-DROP TABLE Enrollments;
-DROP TABLE Students;
-DROP TABLE Professors;
-DROP TABLE Faculty;
-DROP TABLE Prerequisites;
-DROP TABLE Sections;
-DROP TABLE Courses;
-DROP TABLE Sessions;
-DROP TABLE Departments;
+DROP TABLE Enrollments CASCADE;
+DROP TABLE Students CASCADE;
+DROP TABLE Faculty CASCADE;
+DROP TABLE Prerequisites CASCADE;
+DROP TABLE Sections CASCADE;
+DROP TABLE Courses CASCADE;
+DROP TABLE Sessions CASCADE;
+DROP TABLE Departments CASCADE;
+DROP TABLE Professors CASCADE;
+
 
 
 -- Departments
@@ -43,30 +44,6 @@ CREATE TABLE Courses (
     CONSTRAINT fk_department
                      FOREIGN KEY (dept)
                      REFERENCES Departments(abbr)
-);
-
--- Sections
-CREATE TABLE Sections (
-    sectionCode SERIAL PRIMARY KEY,
-    dept CHAR(5),
-    course INT,
-    session INT NOT NULL,
-    -- Monday/Thursday = 'MR', Sunday/Monday/Tuesday/Wednesday/Thursday/Friday/Saturday = 'UMTWRFS'
-    days CHAR(7),
-    startTime TIME,
-    endTime TIME,
-    teacher INT,
-    CONSTRAINT fk_pk_course
-                      FOREIGN KEY (dept, course)
-                      REFERENCES Courses(dept, number),
-    CONSTRAINT fk_session
-                      FOREIGN KEY (session)
-                      REFERENCES Sessions(sessionId),
-    CONSTRAINT valid_time
-                      CHECK (startTime < endTime),
-    CONSTRAINT fk_teacher
-                      FOREIGN KEY (teacher)
-                      REFERENCES Professors(employeeId)
 );
 
 -- Prerequisites
@@ -134,6 +111,30 @@ CREATE TABLE Enrollments (
     CONSTRAINT fk_student
         FOREIGN KEY (student)
         REFERENCES Students(studentId)
+);
+
+-- Sections
+CREATE TABLE Sections (
+                          sectionCode SERIAL PRIMARY KEY,
+                          dept CHAR(5),
+                          course INT,
+                          session INT NOT NULL,
+    -- Monday/Thursday = 'MR', Sunday/Monday/Tuesday/Wednesday/Thursday/Friday/Saturday = 'UMTWRFS'
+                          days CHAR(7),
+                          startTime TIME,
+                          endTime TIME,
+                          teacher INT,
+                          CONSTRAINT fk_pk_course
+                              FOREIGN KEY (dept, course)
+                                  REFERENCES Courses(dept, number),
+                          CONSTRAINT fk_session
+                              FOREIGN KEY (session)
+                                  REFERENCES Sessions(sessionId),
+                          CONSTRAINT valid_time
+                              CHECK (startTime < endTime),
+                          CONSTRAINT fk_teacher
+                              FOREIGN KEY (teacher)
+                                  REFERENCES Professors(employeeId)
 );
 
 CREATE OR REPLACE FUNCTION current_session ()

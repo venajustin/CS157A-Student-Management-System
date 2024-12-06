@@ -53,6 +53,7 @@ public class login extends HttpServlet {
             }
             if (count != 1 || studentId == -1) {
                 out.println("Incorrect email or password");
+                conn.close();
                 return;
             }
 
@@ -69,6 +70,7 @@ public class login extends HttpServlet {
                 res.sendRedirect(url);
             }
 
+            conn.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             out.println("ERROR in backend");

@@ -20,6 +20,7 @@ public class CreateDB extends HttpServlet {
             var stmt = conn.createStatement();
             stmt.execute("CREATE TABLE test1 " +
                     "(count int, time TIME)");
+            conn.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
 

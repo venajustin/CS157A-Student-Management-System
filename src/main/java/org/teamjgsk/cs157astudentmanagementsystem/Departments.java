@@ -36,7 +36,7 @@ public class Departments extends HttpServlet {
 
                 out.println(thistemp);
             }
-
+            conn.close();
         } catch (Exception e) {
             res.sendError(500);
             System.out.println("DB ERROR: " + e.getMessage());

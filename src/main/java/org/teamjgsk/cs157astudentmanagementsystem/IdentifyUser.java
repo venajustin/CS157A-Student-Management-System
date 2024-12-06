@@ -48,7 +48,7 @@ public class IdentifyUser extends HttpServlet {
                            "</H2>");
                 }
 
-
+                conn.close();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 out.println("ERROR in backend");

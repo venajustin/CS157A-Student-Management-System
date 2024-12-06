@@ -53,11 +53,13 @@ public class CourseSearch extends HttpServlet {
 
                 sendCourseList(req, containertemplate, out, rs, rowtemplate);
 
+                conn.close();
 
             } catch (Exception e) {
                 res.sendError(500);
                 System.out.println("DB ERROR: " + e.getMessage());
             }
+
             return;
         }
 
@@ -80,6 +82,7 @@ public class CourseSearch extends HttpServlet {
                 var rs = pstmt.getResultSet();
 
                 sendCourseList(req, containertemplate, out, rs, rowtemplate);
+                conn.close();
                 return;
 
             } catch (Exception e) {
@@ -114,6 +117,7 @@ public class CourseSearch extends HttpServlet {
                 int rowcount = sendCourseList(req, containertemplate, out, rs, rowtemplate);
 
                 if ( rowcount > 1 ) {
+                    conn.close();
                     return;
                 }
                 // If there is only one class returned then we can display the available sections
@@ -130,7 +134,7 @@ public class CourseSearch extends HttpServlet {
 
 
 
-
+                conn.close();
 
             } catch (Exception e) {
                 res.sendError(500);

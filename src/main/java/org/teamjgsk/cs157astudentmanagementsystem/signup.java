@@ -49,15 +49,18 @@ public class signup extends HttpServlet {
 
                 if (countUsersWithEmail > 0) {
                     out.println("user with that email already exists");
+                    conn.close();
                     return;
                 }
             } else {
                 out.println("Email Required");
+                conn.close();
                 return;
             }
 
             if (password.length() > 30 || password.length() < 8) {
                 out.println("Please choose a password with a length between 8 and 30 (inclusive)");
+                conn.close();
                 return;
             }
 
@@ -84,6 +87,7 @@ public class signup extends HttpServlet {
             } catch (SQLException e) {
                 System.out.println(e);
                 out.println("There has been an error, please try different credentials.");
+                conn.close();
                 return;
             }
 
@@ -93,6 +97,7 @@ public class signup extends HttpServlet {
 
             //res.sendRedirect(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api/accounts/")));
 
+            conn.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             out.println("ERROR in backend");

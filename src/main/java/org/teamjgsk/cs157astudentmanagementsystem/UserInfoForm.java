@@ -39,6 +39,7 @@ public class UserInfoForm  extends HttpServlet {
                 System.out.println(e.getMessage());
                 out.println("ERROR in backend");
                 res.sendError(400);
+
                 return;
             }
         } else {
@@ -119,6 +120,7 @@ public class UserInfoForm  extends HttpServlet {
 
 
         }
+        conn.close();
 
     }
 
@@ -159,11 +161,12 @@ public class UserInfoForm  extends HttpServlet {
                 // sending the same form again so that they see the updated changes
                 fetchAndSendUserDataForm(resp, uid, out, url);
 
-
+                conn.close();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 out.println("ERROR in backend");
                 resp.sendError(400);
+
                 return;
             }
         } else {
@@ -171,5 +174,6 @@ public class UserInfoForm  extends HttpServlet {
             resp.setHeader("HX-Redirect", url.substring(0, url.indexOf("/api/")));
 
         }
+
     }
 }
