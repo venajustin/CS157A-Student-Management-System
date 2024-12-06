@@ -32,6 +32,14 @@ public class CourseSearch extends HttpServlet {
         templatePath = getServletContext().getRealPath(templatePath);
         String containertemplate = new String(Files.readAllBytes(Paths.get(templatePath)));
 
+        templatePath = "/WEB-INF/resources/SectionListRow.html";
+        templatePath = getServletContext().getRealPath(templatePath);
+        String sectionrowtemplate = new String(Files.readAllBytes(Paths.get(templatePath)));
+
+        templatePath = "/WEB-INF/resources/SectionListContainer.html";
+        templatePath = getServletContext().getRealPath(templatePath);
+        String sectioncontainertemplate = new String(Files.readAllBytes(Paths.get(templatePath)));
+
         // If there is no department we just display all courses
         if (request_dept == null || request_dept.isEmpty()) {
 
@@ -60,7 +68,7 @@ public class CourseSearch extends HttpServlet {
         }
 
         // If there is no course number specified, we display all courses under that department
-        if (request_number_str == null || request_number_str.length() == 0) {
+        if (request_number_str == null || request_number_str.isEmpty()) {
 
             try {
                 var conn = DatabaseConnection.getConnection();
@@ -72,14 +80,12 @@ public class CourseSearch extends HttpServlet {
                 var rs = pstmt.getResultSet();
 
                 sendCourseList(req, containertemplate, out, rs, rowtemplate);
+                return;
 
             } catch (Exception e) {
                 res.sendError(500);
                 System.out.println("DB ERROR: " + e.getMessage());
             }
-        } else {
-            int request_number = Integer.parseInt(request_number_str.trim());
-            out.println("Work in progress");
         }
 
 
@@ -97,14 +103,20 @@ public class CourseSearch extends HttpServlet {
             try {
                 var conn = DatabaseConnection.getConnection();
                 var pstmt = conn.prepareStatement("SELECT number, dept, name, COALESCE(description, 'N/A'), COALESCE(units, 0) " +
-                        "FROM courses WHERE dept = ? AND number = ?");
+                        "FROM courses WHERE dept = ? AND text(number) LIKE CONCAT(?, '%')");
                 pstmt.setString(1, request_dept);
                 pstmt.setInt(2, request_number);
                 pstmt.executeQuery();
 
                 var rs = pstmt.getResultSet();
+                if (rs.isLast());
 
-                sendCourseList(req, containertemplate, out, rs, rowtemplate);
+                int rowcount = sendCourseList(req, containertemplate, out, rs, rowtemplate);
+
+                if ( rowcount > 1 ) {
+                    return;
+                }
+                // If there is only one class returned then we can display the available sections
 
                 pstmt = conn.prepareStatement("SELECT sectioncode, dept, course, days, starttime, endtime "+
                         "FROM sections WHERE dept = ? AND course = ? AND session IN ( " +
@@ -116,22 +128,25 @@ public class CourseSearch extends HttpServlet {
 
                 rs = pstmt.getResultSet();
 
+
+
+
+
             } catch (Exception e) {
                 res.sendError(500);
                 System.out.println("DB ERROR: " + e.getMessage());
             }
-        } else {
-            int request_number = Integer.parseInt(request_number_str.trim());
-            out.println("Work in progress");
         }
 
     }
 
-    private static void sendCourseList(HttpServletRequest req, String containertemplate, PrintWriter out, ResultSet rs, String rowtemplate) throws SQLException {
+    private static int sendCourseList(HttpServletRequest req, String containertemplate, PrintWriter out, ResultSet rs, String rowtemplate) throws SQLException {
         int rowloc = containertemplate.indexOf("${rows}");
         out.println(containertemplate.substring(0, rowloc));
 
+        var count = 0;
         while (rs.next()) {
+            count++;
             var thistemp = rowtemplate.replace("${courseid}", rs.getString(1));
             thistemp = thistemp.replace("${abbr}", rs.getString(2));
             thistemp = thistemp.replace("${name}", rs.getString(3));
@@ -144,6 +159,7 @@ public class CourseSearch extends HttpServlet {
         }
 
         out.println(containertemplate.substring(rowloc + 7));
+        return count;
     }
 
 }

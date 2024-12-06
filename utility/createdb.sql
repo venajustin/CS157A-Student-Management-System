@@ -1,9 +1,10 @@
 
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 -- Setting up Project Tables
 
 -- Quick Clear of all tables, ordered so each runs without conflict
 DROP TABLE Enrollments;
-DROP TABLE Teaches;
 DROP TABLE Students;
 DROP TABLE Professors;
 DROP TABLE Faculty;
@@ -54,6 +55,7 @@ CREATE TABLE Sections (
     days CHAR(7),
     startTime TIME,
     endTime TIME,
+    teacher INT,
     CONSTRAINT fk_pk_course
                       FOREIGN KEY (dept, course)
                       REFERENCES Courses(dept, number),
@@ -61,7 +63,10 @@ CREATE TABLE Sections (
                       FOREIGN KEY (session)
                       REFERENCES Sessions(sessionId),
     CONSTRAINT valid_time
-                      CHECK (startTime < endTime)
+                      CHECK (startTime < endTime),
+    CONSTRAINT fk_teacher
+                      FOREIGN KEY (teacher)
+                      REFERENCES Professors(employeeId)
 );
 
 -- Prerequisites
@@ -117,22 +122,6 @@ CREATE TABLE Students (
     unitsCompleted INT
 );
 
--- Teaches - Maps teachers to the classes they teach
-CREATE TABLE Teaches (
-   id SERIAL PRIMARY KEY,
-   courseDept CHAR(5),
-   courseNum INT,
-   teacher INT,
-   CONSTRAINT fk_course
-       FOREIGN KEY (courseDept, courseNum)
-           REFERENCES Courses(dept, number),
-   CONSTRAINT fk_teacher
-        FOREIGN KEY (teacher)
-        REFERENCES Professors(employeeId),
-    CONSTRAINT one_instructor -- Remove this to allow for multiple teachers to teach one class
-        UNIQUE (courseDept, courseNum)
-);
-
 -- Enrollments
 CREATE TABLE Enrollments (
     id SERIAL PRIMARY KEY,
@@ -147,3 +136,10 @@ CREATE TABLE Enrollments (
         REFERENCES Students(studentId)
 );
 
+CREATE OR REPLACE FUNCTION current_session ()
+    RETURNS INTEGER AS
+    'SELECT sessionId FROM Sessions
+    WHERE Sessions.firstDay <= current_date
+    AND Sessions.lastDay >= current_date'
+    LANGUAGE SQL
+    RETURNS NULL ON NULL INPUT;

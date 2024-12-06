@@ -1,4 +1,10 @@
-<tr hx-trigger="click" hx-post="${url}" hx-target="#course-search-results" hx-include="this">
+<tr
+        hx-trigger="click"
+        hx-post="${url}"
+        hx-target="#course-search-results"
+        hx-include="this"
+        class="clickable-table-row"
+>
   <input type="hidden" name="department" value="${abbr}"/>
   <input type="hidden" name="number" value="${courseid}"/>
   <td>${abbr} ${courseid}</td>

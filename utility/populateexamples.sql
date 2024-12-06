@@ -1,8 +1,3 @@
--- Populare Students
--- An account with an easy to sign into email and password (password is qwerqwer)
-INSERT INTO public.students (studentid, name, email, password, birthdate, major, minor, gpa, unitscompleted)
-VALUES (DEFAULT, 'justin', 'qwer', '$2a$06$/HdpJIHlAZ9a36sKUxHN1OvSmZ77gXR6nGTdnlM0clgaiNcCTz7Qu', null, 'qwer', 'N/A',
-        null, null);
 
 -- Populate Departments
 INSERT INTO departments VALUES ('MATH', 'Mathmatics');
@@ -24,7 +19,12 @@ INSERT INTO courses VALUES ('120', 'CMPE', 'Computer Organization and Architectu
 INSERT INTO courses VALUES ('102', 'CMPE', 'Assebly Language Programming', 'Assembly language. Fundamentals of static compilation of C source code.', 4);
 
 -- Add an ongoing session ( this current season )
-INSERT INTO sessions VALUES (default, to_date('7/15/2024', 'DD/MM/YYYY'), to_date('12/30/2024', 'DD/MM/YYYY'), 'FALL');
+INSERT INTO sessions VALUES (default, to_date('7/15/2024', 'MM/DD/YYYY'), to_date('12/30/2024', 'MM/DD/YYYY'), 'FALL');
+
+-- Add a default teacher
+INSERT INTO professors VALUES (default, 'Smith', 'ISE', 'smith@school.edu', crypt('12345qwert', gen_salt('bf')));
 
 -- Populate Sections
-INSERT INTO sections VALUES (default, 'ISE', 130, )
+INSERT INTO sections VALUES (default, 'ISE', 130, current_session(), 'MW', '10:30:00', '13:00:00', (SELECT employeeid from professors where name LIKE 'Smith'));
+INSERT INTO sections VALUES (default, 'ISE', 130, current_session(), 'MW', '12:15:00', '14:30:00', (SELECT employeeid from professors where name LIKE 'Smith'));
+
