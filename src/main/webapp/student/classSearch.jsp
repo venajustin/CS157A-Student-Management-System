@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: venaj
-  Date: 12/1/2024
-  Time: 11:23 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -45,9 +38,10 @@
           Class Search:
       </h2>
       <p>
-          - Enter department abbreviation with blank course number to
-          view all classes listed under department. <br>
-          - Enter department and exact course number to view course info
+          - Leave both blank to view all. <br>
+          - Leave number blank to view all courses in a department. <br>
+          - Enter dept. and partial number to display all courses starting with that number <br>
+          - Enter exact course dept. & number to display available sections.
       </p>
       <form hx-post="${pageContext.request.contextPath}/api/coursesearch" hx-target="#course-search-results">
           <label>
@@ -64,6 +58,21 @@
       <div id="course-search-results">
 
       </div>
+
+      <h2>
+          Add Class:
+      </h2>
+      <p>
+          - Enter Section Code to enroll in that section.
+      </p>
+      <form hx-post="${pageContext.request.contextPath}/api/add-class" hx-target="#add-section-error">
+          <label>
+              Section Code:
+              <input name="sectionid" type="number" value=""/>
+          </label> <br>
+          <button type="submit">Add</button>
+          <div id="add-section-error"></div>
+      </form>
 
   </div>
 </div>

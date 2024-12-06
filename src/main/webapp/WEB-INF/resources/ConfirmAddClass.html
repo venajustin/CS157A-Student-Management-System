@@ -1,0 +1,14 @@
+
+<!--Maybe add this later but scrapping for now-->
+
+
+<h2>
+    Add Class:
+</h2>
+<div id="confirm-add-course">
+${abbr} ${courseid} - ${coursename} With Instructor: ${teacher}
+</div>
+<form hx-post="${url}/confirm" hx-target="#confirm-add-course">
+    <button name="courseid" value="${sectionid}">Yes</button>
+    <button>No</button>
+</form>

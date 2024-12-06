@@ -101,13 +101,13 @@ CREATE TABLE Students (
 
 -- Enrollments
 CREATE TABLE Enrollments (
-    id SERIAL PRIMARY KEY,
-    courseDept CHAR(5),
-    courseNum INT,
+    sectionid INT,
     student INT,
+    CONSTRAINT p_key
+        PRIMARY KEY (sectionid, student),
     CONSTRAINT fk_course
-         FOREIGN KEY (courseDept, courseNum)
-         REFERENCES Courses(dept, number),
+         FOREIGN KEY (sectionid)
+         REFERENCES Sections(sectionCode),
     CONSTRAINT fk_student
         FOREIGN KEY (student)
         REFERENCES Students(studentId)

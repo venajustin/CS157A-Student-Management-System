@@ -41,7 +41,7 @@ th {
 .scroll-table {
     margin: 10px;
     width: 75%;
-    height: 300px;
+    max-height: 300px;
     overflow-x: hidden;
     overflow-y: scroll;
 }

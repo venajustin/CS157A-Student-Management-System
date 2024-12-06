@@ -122,17 +122,27 @@ public class CourseSearch extends HttpServlet {
                 }
                 // If there is only one class returned then we can display the available sections
 
-                pstmt = conn.prepareStatement("SELECT sectioncode, dept, course, days, starttime, endtime "+
-                        "FROM sections WHERE dept = ? AND course = ? AND session IN ( " +
-                        "SELECT sessionid FROM sessions WHERE firstday < current_date AND lastday > current_date" +
-                        " )");
+                pstmt = conn.prepareStatement("SELECT " +
+                        "sections.sectioncode, " +
+                        "sections.days, " +
+                        "sections.starttime, " +
+                        "sections.endtime, " +
+                        "professors.name, " +
+                        "sections.dept, " +
+                        "sections.course "+
+                        "FROM sections INNER JOIN professors ON sections.teacher = professors.employeeid" +
+                        " WHERE sections.dept = ? " +
+                        "AND sections.course = ? " +
+                        "AND sections.session = current_session()");
                 pstmt.setString(1, request_dept);
                 pstmt.setInt(2, request_number);
                 pstmt.executeQuery();
 
                 rs = pstmt.getResultSet();
 
+                out.println("<h4>Available Sections:</h4>");
 
+                sendSectionList(req, sectioncontainertemplate, out, rs, sectionrowtemplate);
 
                 conn.close();
 
@@ -156,6 +166,27 @@ public class CourseSearch extends HttpServlet {
             thistemp = thistemp.replace("${name}", rs.getString(3));
             thistemp = thistemp.replace("${description}", rs.getString(4));
             thistemp = thistemp.replace("${units}", rs.getString(5));
+
+            thistemp = thistemp.replace("${url}", req.getRequestURL());
+
+            out.println(thistemp);
+        }
+
+        out.println(containertemplate.substring(rowloc + 7));
+        return count;
+    }
+    private static int sendSectionList(HttpServletRequest req, String containertemplate, PrintWriter out, ResultSet rs, String rowtemplate) throws SQLException {
+        int rowloc = containertemplate.indexOf("${rows}");
+        out.println(containertemplate.substring(0, rowloc));
+
+        var count = 0;
+        while (rs.next()) {
+            count++;
+            var thistemp = rowtemplate.replace("${sectionid}", rs.getString(1));
+            thistemp = thistemp.replace("${days}", rs.getString(2));
+            thistemp = thistemp.replace("${starttime}", rs.getString(3));
+            thistemp = thistemp.replace("${endtime}", rs.getString(4));
+            thistemp = thistemp.replace("${teacher}", rs.getString(5));
 
             thistemp = thistemp.replace("${url}", req.getRequestURL());
 

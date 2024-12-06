@@ -22,7 +22,7 @@
       </div>
     </div>
   </a>
-  <a href="${pageContext.request.contextPath}/student/home.jsp">
+  <a href="${pageContext.request.contextPath}/student/currentSchedule.jsp">
     <div class="sidebar-option">
       <img
               src="${pageContext.request.contextPath}/static/icons/calender.png"

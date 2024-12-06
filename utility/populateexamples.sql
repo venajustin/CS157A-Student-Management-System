@@ -3,13 +3,13 @@
 INSERT INTO departments VALUES ('MATH', 'Mathmatics');
 INSERT INTO departments VALUES ('CS', 'Computer Science');
 INSERT INTO departments VALUES ('CMPE', 'Computer Engineering');
-INSERT INTO departments VALUES ('SE', 'Software Engineering');
-INSERT INTO departments VALUES ('EE', 'Electrical Engineering');
-INSERT INTO departments VALUES ('ME', 'Mechanical Engineering');
-INSERT INTO departments VALUES ('COMM', 'Communications');
-INSERT INTO departments VALUES ('PHYS', 'Physics and Astronomy');
-INSERT INTO departments VALUES ('ENGR', 'General Engineering');
-INSERT INTO departments VALUES ('AFAM', 'African American Studies');
+-- INSERT INTO departments VALUES ('SE', 'Software Engineering');
+-- INSERT INTO departments VALUES ('EE', 'Electrical Engineering');
+-- INSERT INTO departments VALUES ('ME', 'Mechanical Engineering');
+-- INSERT INTO departments VALUES ('COMM', 'Communications');
+-- INSERT INTO departments VALUES ('PHYS', 'Physics and Astronomy');
+-- INSERT INTO departments VALUES ('ENGR', 'General Engineering');
+-- INSERT INTO departments VALUES ('AFAM', 'African American Studies');
 INSERT INTO departments VALUES ('ISE', 'Industrial Engineering');
 
 
