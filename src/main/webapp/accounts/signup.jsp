@@ -41,8 +41,11 @@
       </label>
       <br>
       <label>
-        Major of Study:
-        <input name="major" placeholder="Computer Science" type="text"/>
+        Account Type:
+        <select name="accounttype">
+          <option value="student">Student</option>
+          <option value="professor">Professor</option>
+        </select>
       </label>
       <br>
       <button type="submit">Create Account</button>

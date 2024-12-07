@@ -1,9 +1,15 @@
 
+-- Encription extension, used for passwords
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- Setting up Project Tables
 
--- Quick Clear of all tables, ordered so each runs without conflict
+-- Clear all Procedures, views, ect
+DROP FUNCTION new_account;
+DROP TRIGGER t_acc_insert ON Accounts;
+DROP VIEW Accounts;
+
+-- Clear all tables
 DROP TABLE Enrollments CASCADE;
 DROP TABLE Students CASCADE;
 DROP TABLE Prerequisites CASCADE;
@@ -136,3 +142,37 @@ CREATE TABLE Enrollments (
                                  FOREIGN KEY (student)
                                      REFERENCES Students(studentId)
 );
+
+
+-- Accounts view is used for all signup/login purposes
+CREATE VIEW Accounts AS
+    SELECT
+        studentid AS id, name AS name, email, password, 'student' AS account_type
+        FROM students
+    UNION
+    SELECT
+        employeeId AS id, name AS name, email, password, 'professor' AS account_type
+        FROM professors;
+
+CREATE OR REPLACE FUNCTION new_account () RETURNS TRIGGER
+    AS $$
+    BEGIN
+        IF NEW.account_type = 'student' THEN
+            INSERT INTO Students (name, email, password) VALUES
+                                 (NEW.name, NEW.email, crypt(NEW.password, gen_salt('bf')));
+        END IF;
+        IF NEW.account_type = 'professor' THEN
+            INSERT INTO Professors (name, email, password) VALUES
+                (NEW.name, NEW.email, crypt(NEW.password, gen_salt('bf')));
+        END IF;
+        RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER t_acc_insert
+    INSTEAD OF INSERT ON Accounts
+    FOR EACH ROW
+    EXECUTE FUNCTION new_account();
+
+
+

@@ -34,7 +34,7 @@ public class login extends HttpServlet {
 
         try {
             var conn = DatabaseConnection.getConnection();
-            var pstmt = conn.prepareStatement("SELECT studentId FROM Students " +
+            var pstmt = conn.prepareStatement("SELECT id FROM Accounts " +
                     "WHERE email LIKE ? AND " +
                     "password LIKE crypt(?, password)");
 
@@ -48,7 +48,7 @@ public class login extends HttpServlet {
             int count = 0;
             int studentId = -1;
             while (rs.next()) {
-                studentId = rs.getInt("studentId");
+                studentId = rs.getInt("id");
                 count++;
             }
             if (count != 1 || studentId == -1) {

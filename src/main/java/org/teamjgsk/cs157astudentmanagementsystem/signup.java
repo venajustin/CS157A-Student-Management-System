@@ -19,7 +19,8 @@ public class signup extends HttpServlet {
         String password = req.getParameter("password");
         String passwordConfirm = req.getParameter("password2");
         String email = req.getParameter("email");
-        String major = req.getParameter("major");
+        String acctype = req.getParameter("accounttype");
+        //String major = req.getParameter("major");
 
         if (password.compareTo(passwordConfirm) != 0) {
             out.println(
@@ -65,23 +66,21 @@ public class signup extends HttpServlet {
             }
 
             // for now just supports adding students
-            var pstmtAddUser = conn.prepareStatement("INSERT INTO Students " +
-                    "( studentid, " +
+            var pstmtAddUser = conn.prepareStatement("INSERT INTO Accounts (" +
                     "name, " +
                     "email, " +
                     "password, " +
-                    "major )" +
+                    "account_type ) " +
                     "VALUES ( " +
-                    "default, " +
                     "?, " +
                     "?, " +
-                    "crypt(?, gen_salt('bf')), " +
+                    "?, " +
                     "? " +
                     ") ");
             pstmtAddUser.setString(1, name);
             pstmtAddUser.setString(2, email);
             pstmtAddUser.setString(3, password);
-            pstmtAddUser.setString(4, major);
+            pstmtAddUser.setString(4, acctype);
             try {
                 pstmtAddUser.executeUpdate();
             } catch (SQLException e) {

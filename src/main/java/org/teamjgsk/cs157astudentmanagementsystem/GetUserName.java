@@ -21,8 +21,8 @@ public class GetUserName extends HttpServlet {
             var uid = (Integer) session.getAttribute("userid");
             try {
                 var conn = DatabaseConnection.getConnection();
-                var pstmt = conn.prepareStatement("SELECT name FROM Students " +
-                        "WHERE studentid = ?");
+                var pstmt = conn.prepareStatement("SELECT name FROM Accounts " +
+                        "WHERE id = ?");
 
                 pstmt.setInt(1, uid);
 

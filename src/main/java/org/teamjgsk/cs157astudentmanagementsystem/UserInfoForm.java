@@ -44,8 +44,7 @@ public class UserInfoForm  extends HttpServlet {
             }
         } else {
 
-            res.setHeader("HX-Redirect", url.substring(0, url.indexOf("/api/")));
-
+            out.println("no user data found");
         }
 
 
@@ -116,8 +115,7 @@ public class UserInfoForm  extends HttpServlet {
 
 
         } else {
-            res.setHeader("HX-Redirect", url.substring(0, url.indexOf("/api/")));
-
+            out.println("no user data found");
 
         }
         conn.close();
@@ -171,7 +169,7 @@ public class UserInfoForm  extends HttpServlet {
             }
         } else {
 
-            resp.setHeader("HX-Redirect", url.substring(0, url.indexOf("/api/")));
+            out.println("no user data found");
 
         }
 
