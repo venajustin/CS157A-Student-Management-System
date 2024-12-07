@@ -125,8 +125,8 @@ public class CourseSearch extends HttpServlet {
                 pstmt = conn.prepareStatement("SELECT " +
                         "sections.sectioncode, " +
                         "sections.days, " +
-                        "sections.starttime, " +
-                        "sections.endtime, " +
+                        "   to_char(sections.starttime, 'HH12:MI AM'), " +
+                        "   to_char(sections.endtime, 'HH12:MI AM'), " +
                         "professors.name, " +
                         "sections.dept, " +
                         "sections.course "+

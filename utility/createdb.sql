@@ -6,15 +6,12 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- Quick Clear of all tables, ordered so each runs without conflict
 DROP TABLE Enrollments CASCADE;
 DROP TABLE Students CASCADE;
-DROP TABLE Faculty CASCADE;
 DROP TABLE Prerequisites CASCADE;
 DROP TABLE Sections CASCADE;
 DROP TABLE Courses CASCADE;
 DROP TABLE Sessions CASCADE;
 DROP TABLE Departments CASCADE;
 DROP TABLE Professors CASCADE;
-
-
 
 -- Departments
 CREATE TABLE Departments (
@@ -65,13 +62,6 @@ CREATE TABLE Prerequisites (
 CREATE INDEX IF NOT EXISTS ind_course ON
     Prerequisites (courseDept, courseNum);
 
---Faculty - Will be able to modify all classes and assign professors
-CREATE TABLE Faculty (
-    employeeId SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
-);
 
 -- Professors - Will be able to modify classes they are assigned too and drop students / assign grades
 CREATE TABLE Professors (
@@ -99,19 +89,7 @@ CREATE TABLE Students (
     unitsCompleted INT
 );
 
--- Enrollments
-CREATE TABLE Enrollments (
-    sectionid INT,
-    student INT,
-    CONSTRAINT p_key
-        PRIMARY KEY (sectionid, student),
-    CONSTRAINT fk_course
-         FOREIGN KEY (sectionid)
-         REFERENCES Sections(sectionCode),
-    CONSTRAINT fk_student
-        FOREIGN KEY (student)
-        REFERENCES Students(studentId)
-);
+
 
 -- Sections
 CREATE TABLE Sections (
@@ -144,3 +122,17 @@ CREATE OR REPLACE FUNCTION current_session ()
     AND Sessions.lastDay >= current_date'
     LANGUAGE SQL
     RETURNS NULL ON NULL INPUT;
+
+-- Enrollments
+CREATE TABLE Enrollments (
+                             sectionid INT,
+                             student INT,
+                             CONSTRAINT p_key
+                                 PRIMARY KEY (sectionid, student),
+                             CONSTRAINT fk_course
+                                 FOREIGN KEY (sectionid)
+                                     REFERENCES Sections(sectionCode),
+                             CONSTRAINT fk_student
+                                 FOREIGN KEY (student)
+                                     REFERENCES Students(studentId)
+);

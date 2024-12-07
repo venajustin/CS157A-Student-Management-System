@@ -22,7 +22,10 @@
   <%@ include file="../sidebar.jsp"%>
   <div id="content">
 
-
+    <h3>
+        Current Schedule:
+    </h3>
+      <div hx-get="${pageContext.request.contextPath}/api/student/schedule" hx-trigger="load"></div>
 
   </div>
 </div>
