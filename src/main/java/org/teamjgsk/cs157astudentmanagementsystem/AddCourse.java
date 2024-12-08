@@ -5,38 +5,33 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.sql.Time;
 
-@WebServlet(name = "addsection", value = "/api/professor/createsection")
+@WebServlet(name = "addcourse", value = "/api/professor/createcourse")
 
-public class AddSection extends HttpServlet {
+public class AddCourse extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
         res.setContentType("text/html");
         var out = res.getWriter();
 
-        var session = req.getSession();
-        var uid = (int) session.getAttribute("userid");
-
         String request_dept = req.getParameter("department");
         String request_number_str = req.getParameter("number");
-        String request_days = req.getParameter("days");
-        String request_starttime = req.getParameter("starttime");
-        String request_endtime = req.getParameter("endtime");
+        String request_name = req.getParameter("name");
+        String request_description = req.getParameter("description");
+        String request_units_str = req.getParameter("units");
 
         try {
             var conn = DatabaseConnection.getConnection();
-            var st = conn.prepareStatement("SELECT dept, number FROM courses WHERE dept = ? AND number = ?");
+            var st = conn.prepareStatement("SELECT abbr FROM departments WHERE abbr = ?");
             st.setString(1, request_dept);
-            st.setInt(2, Integer.parseInt(request_number_str));
             st.executeQuery();
             var rs = st.getResultSet();
             conn.close();
 
             if (!rs.next()) {
-                out.println("Course " + request_dept + " " + request_number_str + " does not exist");
-                out.println("Enter a valid department and course number");
+                out.println("Enter a valid department");
                 return;
             }
 
@@ -48,23 +43,40 @@ public class AddSection extends HttpServlet {
 
         try {
             var conn = DatabaseConnection.getConnection();
-            var st = conn.prepareStatement("INSERT INTO sections " +
-                    "(dept, course, session, days, starttime, endtime, teacher)" +
+            var st = conn.prepareStatement("SELECT dept, number FROM courses WHERE dept = ? AND number = ?");
+            st.setString(1, request_dept);
+            st.setInt(2, Integer.parseInt(request_number_str));
+            st.executeQuery();
+            var rs = st.getResultSet();
+            conn.close();
+
+            if (rs.next()) {
+                out.println("Course " + request_dept + " " + request_number_str + " already exists");
+                return;
+            }
+
+        } catch (Exception e) {
+            out.println("Invalid input");
+            System.out.println("ERROR: " + e.getMessage());
+            return;
+        }
+
+        try {
+            var conn = DatabaseConnection.getConnection();
+            var st = conn.prepareStatement("INSERT INTO courses " +
+                    "(number, dept, name, description, units )" +
                     "VALUES ( " +
                     "?," +
-                    "?," +
-                    "current_session()," +
                     "?," +
                     "?," +
                     "?," +
                     "? " +
                     ") ");
-            st.setString(1, request_dept);
-            st.setInt(2, Integer.parseInt(request_number_str));
-            st.setString(3, request_days);
-            st.setTime(4, Time.valueOf(request_starttime));
-            st.setTime(5, Time.valueOf(request_endtime));
-            st.setInt(6, uid);
+            st.setInt(1, Integer.parseInt(request_number_str));
+            st.setString(2, request_dept);
+            st.setString(3, request_name);
+            st.setString(4, request_description);
+            st.setInt(5, Integer.parseInt(request_units_str));
             st.executeUpdate();
             conn.close();
 
@@ -84,17 +96,19 @@ public class AddSection extends HttpServlet {
         res.setContentType("text/html");
         var out = res.getWriter();
 
-        String req_id = req.getParameter("sectionid");
+        String request_department = req.getParameter("department");
+        String request_number = req.getParameter("number");
 
         try {
             var conn = DatabaseConnection.getConnection();
-            var ps = conn.prepareStatement("DELETE FROM sections " +
-                    "WHERE sectioncode = ? ");
-            ps.setInt(1, Integer.parseInt(req_id));
+            var ps = conn.prepareStatement("DELETE FROM courses " +
+                    "WHERE dept = ? and number = ? ");
+            ps.setString(1, request_department);
+            ps.setInt(2, Integer.parseInt(request_number));
             ps.executeUpdate();
             conn.close();
 
-            out.println("Section " + req_id + " deleted successfully");
+            out.println("Course " + request_department + " " + request_number + " deleted successfully");
 
         } catch (Exception e) {
             out.println("Invalid input");
