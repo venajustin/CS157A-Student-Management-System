@@ -11,6 +11,7 @@ import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 @WebServlet(name = "selectsection", value = "/api/professor/selectsection")
 
@@ -45,33 +46,54 @@ public class SelectSection extends HttpServlet {
                         "grade_letter(enrollments.grade) " +
                         "FROM accounts" +
                         "     INNER JOIN students ON id = studentid " +
-                        "     INNER JOIN enrollments ON student = id " +
-                        "WHERE enrollments.sectionid = ?");
+                        "     INNER JOIN enrollments ON student = id" +
+                        "     INNER JOIN sections ON enrollments.sectionid = sections.sectioncode " +
+                        "WHERE enrollments.sectionid = ? AND sections.teacher = ?");
                 st.setInt(1, Integer.parseInt(req.getParameter("sectionid")));
-
+                st.setInt(2, uid);
 
                 st.executeQuery();
 
                 var rs = st.getResultSet();
+                conn.close();
+
+                class studentrow {
+                    public String id;
+                    public String name;
+                    public String major;
+                    public String grade;
+
+                }
+
+                var studentlist = new ArrayList<studentrow>();
+                int count = 0;
+                while(rs.next()){
+                    count++;
+                    studentrow sr = new studentrow();
+                    sr.id = rs.getString(1);
+                    if (sr.id == null) sr.id = "N/A";
+                    sr.name = rs.getString(2);
+                    if (sr.name == null) sr.name = "N/A";
+                    sr.major = rs.getString(3);
+                    if (sr.major == null) sr.major = "N/A";
+                    sr.grade = rs.getString(4);
+                    if (sr.grade == null) sr.grade = "N/A";
+                    studentlist.add(sr);
+                }
+                if (count == 0) {
+                    out.println("Invalid course or no students enrolled");
+                    return;
+                }
 
                 int rowloc = containertemplate.indexOf("${rows}");
                 out.println(containertemplate.substring(0, rowloc));
 
-                while (rs.next()) {
+                for (var row : studentlist) {
 
-                    var id = rs.getString(1);
-                    if (id == null) id = "N/A";
-                    var name = rs.getString(2);
-                    if (name == null) name = "N/A";
-                    var major = rs.getString(3);
-                    if (major == null) major = "N/A";
-                    var grade = rs.getString(4);
-                    if (grade == null) grade = "N/A";
-
-                    var thistemp = rowtemplate.replace("${id}", id);
-                    thistemp = thistemp.replace("${name}", name);
-                    thistemp = thistemp.replace("${major}", major);
-                    thistemp = thistemp.replace("${grade}", grade);
+                   var thistemp = rowtemplate.replace("${id}", row.id);
+                    thistemp = thistemp.replace("${name}", row.name);
+                    thistemp = thistemp.replace("${major}", row.major);
+                    thistemp = thistemp.replace("${grade}", row.grade);
 
                     out.println(thistemp);
                 }
@@ -81,7 +103,6 @@ public class SelectSection extends HttpServlet {
                 secondHalfContainer = secondHalfContainer.replace("${url}", req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api")));
                 out.println(secondHalfContainer);
 
-                conn.close();
 
             } catch (Exception e ) {
                 out.println("INVALID ID");
