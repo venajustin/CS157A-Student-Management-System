@@ -36,10 +36,11 @@ public class signup extends HttpServlet {
         try {
             var conn = DatabaseConnection.getConnection();
 
+
             // Checking if another user uses that email
             if (!email.isEmpty()) {
                 var pstmtCheckExists = conn.prepareStatement("SELECT COUNT(email)" +
-                        " FROM students WHERE email LIKE ?");
+                        " FROM accounts WHERE email LIKE ?");
 
                 pstmtCheckExists.setString(1, email);
                 pstmtCheckExists.executeQuery();
@@ -65,7 +66,8 @@ public class signup extends HttpServlet {
                 return;
             }
 
-            // for now just supports adding students
+            conn.setAutoCommit(false);
+
             var pstmtAddUser = conn.prepareStatement("INSERT INTO Accounts (" +
                     "name, " +
                     "email, " +
@@ -74,9 +76,9 @@ public class signup extends HttpServlet {
                     "VALUES ( " +
                     "?, " +
                     "?, " +
-                    "?, " +
+                    "crypt(?, gen_salt('bf')), " +
                     "? " +
-                    ") ");
+                    ")");
             pstmtAddUser.setString(1, name);
             pstmtAddUser.setString(2, email);
             pstmtAddUser.setString(3, password);
@@ -86,16 +88,51 @@ public class signup extends HttpServlet {
             } catch (SQLException e) {
                 System.out.println(e);
                 out.println("There has been an error, please try different credentials.");
+                conn.rollback();
                 conn.close();
                 return;
             }
+
+            try {
+                if (acctype.compareTo("professor") == 0) {
+                    var pstmt = conn.prepareStatement("INSERT INTO professors " +
+                            "(employeeid, dept)" +
+                            "VALUES " +
+                            "(" +
+                            "(SELECT id FROM accounts WHERE email = ?), " +
+                            "? " +
+                            ")");
+                    pstmt.setString(1, email);
+                    pstmt.setString(2, req.getParameter("department"));
+
+                    pstmt.executeUpdate();
+                } else {
+                    var pstmt = conn.prepareStatement("INSERT INTO Students " +
+                            "(studentid, major)" +
+                            "VALUES " +
+                            "(" +
+                            "(SELECT id FROM accounts WHERE email = ?), " +
+                            "? " +
+                            ")");
+                    pstmt.setString(1, email);
+                    pstmt.setString(2, req.getParameter("major"));
+
+                    pstmt.executeUpdate();
+                }
+            } catch (Exception e) {
+                out.println("Invalid Department");
+                conn.rollback();
+                conn.close();
+                return;
+            }
+
 
             System.out.println("Name: " + name + " CREATED AN ACCOUNT");
             //System.out.println(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api/accounts/")));
             res.setHeader("HX-Redirect",req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api/accounts/")));
 
             //res.sendRedirect(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/api/accounts/")));
-
+            conn.commit();
             conn.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());

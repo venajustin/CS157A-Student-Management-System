@@ -53,36 +53,61 @@ public class UserInfoForm  extends HttpServlet {
     private void fetchAndSendUserDataForm(HttpServletResponse res, Integer uid, PrintWriter out, StringBuffer url) throws NamingException, SQLException, IOException {
         var conn = DatabaseConnection.getConnection();
         var pstmt = conn.prepareStatement("SELECT " +
-                "Students.studentid, " +
-                "Students.name, " +
-                "Students.email, " +
-                "Students.major, " +
-                "avg(Enrollments.grade) AS gpa, " +
-                "SUM(Courses.units) AS unitscompleted " +
-                "FROM Students " +
-                "LEFT JOIN Enrollments ON Students.studentid = Enrollments.student " +
-                "INNER JOIN Sections ON Enrollments.sectionid = Sections.sectioncode " +
-                "INNER JOIN Courses ON Sections.dept = Courses.dept and Sections.course = Courses.number " +
-                "GROUP BY  ( " +
-                "Students.studentid, " +
-                "Students.name, " +
-                "Students.email, " +
-                "Students.major ) " +
-                "HAVING studentid = ?");
+                "id, name, email " +
+                "FROM accounts " +
+                "WHERE id = ?"
+        );
 
         pstmt.setInt(1, uid);
 
         pstmt.executeQuery();
-
         var rs = pstmt.getResultSet();
 
         if (rs.next()) {
             var id = rs.getString(1);
             var name = rs.getString(2);
             var email = rs.getString(3);
-            var major = rs.getString(4);
-            var gpa = rs.getString(5);
-            var units = rs.getString(6);
+            String major = null;
+
+            pstmt = conn.prepareStatement("SELECT " +
+                    "major " +
+                    "FROM students " +
+                    "WHERE studentid = ?"
+            );
+
+            pstmt.setInt(1, uid);
+
+            pstmt.executeQuery();
+            rs = pstmt.getResultSet();
+            if (rs.next()) {
+                major = rs.getString(1);
+            }
+
+            pstmt = conn.prepareStatement("SELECT " +
+                    "avg(Enrollments.grade) AS gpa, " +
+                    "SUM(Courses.units) AS unitscompleted " +
+                    "FROM accounts " +
+                    "INNER JOIN students ON students.studentid = accounts.id " +
+                    "LEFT JOIN Enrollments ON Students.studentid = Enrollments.student " +
+                    "INNER JOIN Sections ON Enrollments.sectionid = Sections.sectioncode " +
+                    "INNER JOIN Courses ON Sections.dept = Courses.dept and Sections.course = Courses.number " +
+                    "WHERE accounts.id = ? " +
+                    "GROUP BY  ( " +
+                    "accounts.id ) "
+            );
+
+            pstmt.setInt(1, uid);
+
+            pstmt.executeQuery();
+
+            String gpa = null;
+            String units = null;
+            rs = pstmt.getResultSet();
+            if (rs.next()) {
+
+                gpa = rs.getString(1);
+                units = rs.getString(2);
+            }
 
             InitialContext ctx = new InitialContext();
             var templatePath = "/WEB-INF/resources/UserInfoForm.html";
@@ -143,18 +168,25 @@ public class UserInfoForm  extends HttpServlet {
                 var major = req.getParameter("major");
 
                 var conn = DatabaseConnection.getConnection();
-                var pstmt = conn.prepareStatement("UPDATE Students SET " +
+                var pstmt = conn.prepareStatement("UPDATE Accounts SET " +
                         "name = ?, " +
-                        "email = ?, " +
-                        "major = ?, " +
-                        "WHERE studentid = ?");
+                        "email = ? " +
+                        "WHERE id = ?");
 
                 pstmt.setString(1, name);
                 pstmt.setString(2, email);
-                pstmt.setString(3, major);
-                pstmt.setInt(4, uid);
+                pstmt.setInt(3, uid);
 
-                pstmt.executeQuery();
+                pstmt.executeUpdate();
+
+                pstmt = conn.prepareStatement("UPDATE Students SET " +
+                        "major = ? " +
+                        "WHERE studentid = ?");
+                pstmt.setString(1, major);
+
+                pstmt.setInt(2, uid);
+
+                pstmt.executeUpdate();
 
 
                 // sending the same form again so that they see the updated changes

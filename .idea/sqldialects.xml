@@ -2,7 +2,6 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/java/org/teamjgsk/cs157astudentmanagementsystem/CreateDB.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/main/java/org/teamjgsk/cs157astudentmanagementsystem/HelloServlet.java" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/utility/createdb.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/utility/populateexamples.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />

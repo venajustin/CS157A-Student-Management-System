@@ -15,3 +15,16 @@ function collapse_sidebar() {
 
 
 }
+
+function changeacctype(element) {
+    let newtype = element.selectedIndex;
+    let dept = document.getElementById("dept-input");
+    let major = document.getElementById("major-input");
+    if (newtype === 1) {
+        dept.classList.remove("hide");
+        major.classList.add("hide");
+    } else {
+        major.classList.remove("hide");
+        dept.classList.add("hide");
+    }
+}

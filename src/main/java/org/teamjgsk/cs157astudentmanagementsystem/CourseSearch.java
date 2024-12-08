@@ -112,7 +112,6 @@ public class CourseSearch extends HttpServlet {
                 pstmt.executeQuery();
 
                 var rs = pstmt.getResultSet();
-                if (rs.isLast());
 
                 int rowcount = sendCourseList(req, containertemplate, out, rs, rowtemplate);
 
@@ -127,10 +126,11 @@ public class CourseSearch extends HttpServlet {
                         "sections.days, " +
                         "   to_char(sections.starttime, 'HH12:MI AM'), " +
                         "   to_char(sections.endtime, 'HH12:MI AM'), " +
-                        "professors.name, " +
+                        "accounts.name, " +
                         "sections.dept, " +
                         "sections.course "+
-                        "FROM sections INNER JOIN professors ON sections.teacher = professors.employeeid" +
+                        "FROM sections INNER JOIN professors ON sections.teacher = professors.employeeid " +
+                        "INNER JOIN accounts ON professors.employeeid = accounts.id" +
                         " WHERE sections.dept = ? " +
                         "AND sections.course = ? " +
                         "AND sections.session = current_session()");

@@ -173,3 +173,9 @@ td, th {
     background-color: #e7e7e7;
     cursor: pointer;
 }
+
+.hide {
+    display:none;
+}
+
+

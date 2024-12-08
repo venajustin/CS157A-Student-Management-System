@@ -59,12 +59,7 @@
 
       </div>
 
-      <h2>
-          Add Class:
-      </h2>
-      <p>
-          - Enter Section Code to enroll in that section.
-      </p>
+
 
       <div hx-get="${pageContext.request.contextPath}/api/addclassfield" hx-trigger="load"></div>
 

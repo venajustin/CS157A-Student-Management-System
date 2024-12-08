@@ -42,10 +42,20 @@
       <br>
       <label>
         Account Type:
-        <select name="accounttype">
+        <select name="accounttype" onchange="changeacctype(this);">
           <option value="student">Student</option>
           <option value="professor">Professor</option>
         </select>
+      </label>
+      <br>
+      <label id="dept-input" class="hide">
+        Department:
+        <input name="department" placeholder="MATH" type="text"/>
+      </label>
+
+      <label id="major-input">
+        Major of Study:
+        <input name="major" placeholder="Computer Science" type="text"/>
       </label>
       <br>
       <button type="submit">Create Account</button>

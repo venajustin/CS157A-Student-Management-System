@@ -30,6 +30,20 @@ public class Enroll extends HttpServlet {
             var sectionid = Integer.parseInt(sectionstr.trim());
             try {
                 var conn = DatabaseConnection.getConnection();
+
+                var stmt0 = conn.prepareStatement("SELECT studentid FROM students WHERE studentid = ?");
+                stmt0.setInt(1, uid);
+                 stmt0.executeQuery();
+                var rs0 = stmt0.getResultSet();
+
+                if (!rs0.next()) {
+                    // There is no results, so no student has this id
+                    conn.close();
+                    out.println("Cannot add a class if you are not a student");
+                    return;
+                }
+
+
                 var stmt = conn.prepareStatement("INSERT INTO enrollments " +
                         "VALUES (?, ?)");
                 stmt.setInt(1, sectionid);

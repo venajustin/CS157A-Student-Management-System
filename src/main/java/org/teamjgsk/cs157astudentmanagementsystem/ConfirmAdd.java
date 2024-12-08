@@ -36,10 +36,11 @@ public class ConfirmAdd extends HttpServlet {
                     "courses.dept, " +
                     "courses.number, " +
                     "courses.name, " +
-                    "professors.name " +
+                    "accounts.name " +
                     "FROM sections INNER JOIN professors ON sections.teacher = professors.employeeid " +
                     " INNER JOIN courses ON sections.dept = courses.dept AND sections.course = courses.number " +
-                    "WHERE sections.sectioncode = ?");
+                    "INNER JOIN accounts ON professors.employeeid = accounts.id " +
+                    " WHERE sections.sectioncode = ?");
             pstmt.setInt(1, sectionid);
 
             pstmt.executeQuery();

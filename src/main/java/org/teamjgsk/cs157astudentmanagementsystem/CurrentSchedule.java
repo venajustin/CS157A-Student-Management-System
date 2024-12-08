@@ -41,7 +41,7 @@ public class CurrentSchedule extends HttpServlet {
                         "   sections.days, " +
                         "   to_char(sections.starttime, 'HH12:MI AM'), " +
                         "   to_char(sections.endtime, 'HH12:MI AM'), " +
-                        "   professors.name, " +
+                        "   accounts.name, " +
                         "   grade_letter(enrollments.grade) " +
                         "FROM courses INNER JOIN sections " +
                         "   ON sections.dept = courses.dept " +
@@ -50,6 +50,7 @@ public class CurrentSchedule extends HttpServlet {
                         "   ON enrollments.sectionid = sections.sectioncode " +
                         "   INNER JOIN professors " +
                         "   ON professors.employeeid = sections.teacher " +
+                        "   INNER JOIN accounts ON professors.employeeid = accounts.id " +
                         "WHERE " +
                         "   enrollments.student = ? ");
                 pstmt.setInt(1, uid);

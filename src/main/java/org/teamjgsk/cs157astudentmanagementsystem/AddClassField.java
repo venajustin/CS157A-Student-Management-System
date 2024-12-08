@@ -32,6 +32,7 @@ public class AddClassField extends HttpServlet {
                         "WHERE id = ?");
                 pstmt.setInt(1, uid);
 
+                pstmt.executeQuery();
                 var rs = pstmt.getResultSet();
 
                 rs.next();
