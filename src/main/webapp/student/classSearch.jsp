@@ -65,14 +65,8 @@
       <p>
           - Enter Section Code to enroll in that section.
       </p>
-      <form hx-post="${pageContext.request.contextPath}/api/add-class" hx-target="#add-section-error">
-          <label>
-              Section Code:
-              <input name="sectionid" type="number" value=""/>
-          </label> <br>
-          <button type="submit">Add</button>
-          <div id="add-section-error"></div>
-      </form>
+
+      <div hx-get="${pageContext.request.contextPath}/api/addclassfield" hx-trigger="load"></div>
 
   </div>
 </div>

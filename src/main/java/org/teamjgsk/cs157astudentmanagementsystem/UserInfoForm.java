@@ -53,16 +53,22 @@ public class UserInfoForm  extends HttpServlet {
     private void fetchAndSendUserDataForm(HttpServletResponse res, Integer uid, PrintWriter out, StringBuffer url) throws NamingException, SQLException, IOException {
         var conn = DatabaseConnection.getConnection();
         var pstmt = conn.prepareStatement("SELECT " +
-                "studentid, " +
-                "name, " +
-                "email, " +
-                "birthdate, " +
-                "major, " +
-                "minor, " +
-                "gpa, " +
-                "unitscompleted " +
+                "Students.studentid, " +
+                "Students.name, " +
+                "Students.email, " +
+                "Students.major, " +
+                "avg(Enrollments.grade) AS gpa, " +
+                "SUM(Courses.units) AS unitscompleted " +
                 "FROM Students " +
-                "WHERE studentid = ?");
+                "LEFT JOIN Enrollments ON Students.studentid = Enrollments.student " +
+                "INNER JOIN Sections ON Enrollments.sectionid = Sections.sectioncode " +
+                "INNER JOIN Courses ON Sections.dept = Courses.dept and Sections.course = Courses.number " +
+                "GROUP BY  ( " +
+                "Students.studentid, " +
+                "Students.name, " +
+                "Students.email, " +
+                "Students.major ) " +
+                "HAVING studentid = ?");
 
         pstmt.setInt(1, uid);
 
@@ -74,10 +80,9 @@ public class UserInfoForm  extends HttpServlet {
             var id = rs.getString(1);
             var name = rs.getString(2);
             var email = rs.getString(3);
-            var birthdate = rs.getString(4);
-            var major = rs.getString(5);
-            var minor = rs.getString(6);
-            var gpa = rs.getString(7);
+            var major = rs.getString(4);
+            var gpa = rs.getString(5);
+            var units = rs.getString(6);
 
             InitialContext ctx = new InitialContext();
             var templatePath = "/WEB-INF/resources/UserInfoForm.html";
@@ -90,10 +95,9 @@ public class UserInfoForm  extends HttpServlet {
                 placeholders.put("id", id);
                 placeholders.put("name", name);
                 placeholders.put("email", email);
-                placeholders.put("birthdate", birthdate);
                 placeholders.put("major", major);
-                placeholders.put("minor", minor);
                 placeholders.put("gpa", gpa);
+                placeholders.put("totalunits", units);
 
                 for(Map.Entry<String, String> entry : placeholders.entrySet()) {
                     if (entry.getValue() == null) {
@@ -137,21 +141,18 @@ public class UserInfoForm  extends HttpServlet {
                 var name = req.getParameter("name");
                 var email = req.getParameter("email");
                 var major = req.getParameter("major");
-                var minor = req.getParameter("minor");
 
                 var conn = DatabaseConnection.getConnection();
                 var pstmt = conn.prepareStatement("UPDATE Students SET " +
                         "name = ?, " +
                         "email = ?, " +
                         "major = ?, " +
-                        "minor = ? " +
                         "WHERE studentid = ?");
 
                 pstmt.setString(1, name);
                 pstmt.setString(2, email);
                 pstmt.setString(3, major);
-                pstmt.setString(4, minor);
-                pstmt.setInt(5, uid);
+                pstmt.setInt(4, uid);
 
                 pstmt.executeQuery();
 

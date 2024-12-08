@@ -41,7 +41,8 @@ public class CurrentSchedule extends HttpServlet {
                         "   sections.days, " +
                         "   to_char(sections.starttime, 'HH12:MI AM'), " +
                         "   to_char(sections.endtime, 'HH12:MI AM'), " +
-                        "   professors.name " +
+                        "   professors.name, " +
+                        "   grade_letter(enrollments.grade) " +
                         "FROM courses INNER JOIN sections " +
                         "   ON sections.dept = courses.dept " +
                         "   AND sections.course = courses.number " +
@@ -60,21 +61,29 @@ public class CurrentSchedule extends HttpServlet {
                 out.println(containertemplate.substring(0, rowloc));
 
                 var count = 0;
+                var unitscount = 0;
                 while (rs.next()) {
                     count++;
                     var thistemp = rowtemplate.replace("${abbr}", rs.getString(1));
                     thistemp = thistemp.replace("${courseid}", rs.getString(2));
                     thistemp = thistemp.replace("${name}", rs.getString(3));
-                    thistemp = thistemp.replace("${units}", rs.getString(4));
+                    var units = rs.getString(4);
+                    unitscount += Integer.parseInt(units);
+                    thistemp = thistemp.replace("${units}", units);
                     thistemp = thistemp.replace("${days}", rs.getString(5));
                     thistemp = thistemp.replace("${starttime}", rs.getString(6));
                     thistemp = thistemp.replace("${endtime}", rs.getString(7));
                     thistemp = thistemp.replace("${instructor}", rs.getString(8));
+                    thistemp = thistemp.replace("${grade}", rs.getString(9));
 
                     out.println(thistemp);
                 }
 
-                out.println(containertemplate.substring(rowloc + 7));
+                var secondHalfContainer = containertemplate.substring(rowloc + 7).replace(
+                        "${units}", Integer.toString(unitscount)
+                );
+
+                out.println(secondHalfContainer);
 
                 conn.close();
 

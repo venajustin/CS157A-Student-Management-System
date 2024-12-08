@@ -5,6 +5,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- Setting up Project Tables
 
 -- Clear all Procedures, views, ect
+DROP FUNCTION grade_letter;
 DROP FUNCTION new_account;
 DROP TRIGGER t_acc_insert ON Accounts;
 DROP VIEW Accounts;
@@ -89,13 +90,8 @@ CREATE TABLE Students (
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     birthdate DATE,
-    major TEXT,
-    minor TEXT,
-    gpa REAL,
-    unitsCompleted INT
+    major TEXT
 );
-
-
 
 -- Sections
 CREATE TABLE Sections (
@@ -131,16 +127,19 @@ CREATE OR REPLACE FUNCTION current_session ()
 
 -- Enrollments
 CREATE TABLE Enrollments (
-                             sectionid INT,
-                             student INT,
-                             CONSTRAINT p_key
-                                 PRIMARY KEY (sectionid, student),
-                             CONSTRAINT fk_course
-                                 FOREIGN KEY (sectionid)
-                                     REFERENCES Sections(sectionCode),
-                             CONSTRAINT fk_student
-                                 FOREIGN KEY (student)
-                                     REFERENCES Students(studentId)
+     sectionid INT,
+     student INT,
+     grade REAL,
+     CONSTRAINT p_key
+         PRIMARY KEY (sectionid, student),
+     CONSTRAINT fk_course
+         FOREIGN KEY (sectionid)
+             REFERENCES Sections(sectionCode),
+     CONSTRAINT fk_student
+         FOREIGN KEY (student)
+             REFERENCES Students(studentId),
+     CONSTRAINT grade_range
+        CHECK (grade >= 0 AND grade <= 4.0)
 );
 
 
@@ -175,4 +174,28 @@ CREATE TRIGGER t_acc_insert
     EXECUTE FUNCTION new_account();
 
 
-
+CREATE FUNCTION grade_letter ( grade REAL )
+    RETURNS CHAR(2)
+    AS $$
+    BEGIN
+        IF grade > 4 OR grade < 0 THEN
+            return ' ';
+        end if;
+        IF grade = 4 THEN
+            return 'A';
+        end if;
+        IF grade >= 3 THEN
+            return 'B';
+        end if;
+        IF grade >= 2 THEN
+            return 'C';
+        end if;
+        IF grade >= 1 THEN
+            return 'D';
+        end if;
+        IF grade >= 0 THEN
+            return 'F';
+        end if;
+        return '-';
+    END;
+    $$ LANGUAGE plpgsql;
