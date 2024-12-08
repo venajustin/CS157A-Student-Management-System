@@ -1,0 +1,27 @@
+<div class="scroll-table">
+  <table>
+    <tr>
+      <th>Student ID</th>
+      <th>Name</th>
+      <th>Major</th>
+      <th>Grade</th>
+    </tr>
+    ${rows}
+  </table>
+  <form hx-post="${url}/api/professor/setgrade" hx-target="#account-error">
+    <input type="hidden" name="sectionid" value="${sectionid}"/>
+    Update Student Grade: <br>
+    <label>
+      Student ID:
+      <input type="number" name="student"/>
+    </label><br>
+    <label>
+      New Grade:
+      <input type="number" name="newgrade"/>
+      <br>
+      (input number 0, 1, 2, 3, or 4)
+    </label>
+    <br> <button type="submit">Submit</button>
+  </form>
+  <div id="account-error"></div>
+</div>

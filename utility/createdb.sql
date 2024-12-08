@@ -12,7 +12,6 @@ DROP FUNCTION grade_letter ( grade REAL );
 
 -- Clear all tables
 DROP TABLE Enrollments ;
-DROP TABLE Prerequisites ;
 DROP TABLE Sections ;
 DROP TABLE Courses ;
 DROP TABLE Sessions ;
@@ -52,24 +51,6 @@ CREATE TABLE Courses (
                      REFERENCES Departments(abbr)
 );
 
--- Prerequisites
-CREATE TABLE Prerequisites (
-    id SERIAL PRIMARY KEY,
-    courseDept CHAR(5),
-    courseNum INT,
-    requiresDept CHAR(5),
-    requiresNum INT,
-    CONSTRAINT fk_course
-                           FOREIGN KEY (courseDept, courseNum)
-                           REFERENCES Courses(dept, number),
-    CONSTRAINT fk_require
-                           FOREIGN KEY (requiresDept, requiresNum)
-                           REFERENCES Courses(dept, number)
-);
-
--- Index on prerequisites because there will be a lot of recursive prerequisite checks that will look up by course dept + number often
-CREATE INDEX IF NOT EXISTS ind_course ON
-    Prerequisites (courseDept, courseNum);
 
 CREATE TABLE Accounts (
     id SERIAL PRIMARY KEY,

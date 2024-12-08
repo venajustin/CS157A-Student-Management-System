@@ -20,7 +20,7 @@ public class IdentifyUser extends HttpServlet {
             var uid = (Integer) session.getAttribute("userid");
             try {
                 var conn = DatabaseConnection.getConnection();
-                var pstmt = conn.prepareStatement("SELECT name FROM Accounts " +
+                var pstmt = conn.prepareStatement("SELECT name, account_type FROM Accounts " +
                         "WHERE id = ?");
 
                 pstmt.setInt(1, uid);
@@ -35,8 +35,17 @@ public class IdentifyUser extends HttpServlet {
                     System.out.println("user logged in");
 
                     var name = rs.getString(1);
+                    var acctype = rs.getString(2);
+
                     out.println("redirecting");
-                    res.setHeader("HX-Redirect", url + "student/home.jsp");
+
+                    if (acctype.compareTo("professor") == 0) {
+                        res.setHeader("HX-Redirect", url + "professor/home.jsp");
+                    } else {
+                        res.setHeader("HX-Redirect", url + "student/home.jsp");
+
+                    }
+
 
                 } else {
 

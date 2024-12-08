@@ -32,8 +32,21 @@ public class UserInfoForm  extends HttpServlet {
         if (session.getAttribute("userid") != null) {
             var uid = (Integer) session.getAttribute("userid");
             try {
-                fetchAndSendUserDataForm(res, uid, out, url);
+                var conn = DatabaseConnection.getConnection();
+                var stmt = conn.prepareStatement("SELECT account_type FROM accounts where id = ?");
+                stmt.setInt(1, uid);
+                stmt.executeQuery();
+                var rs = stmt.getResultSet();
+                rs.next();
+                var acctype = rs.getString(1);
+                conn.close();
 
+                if (acctype.compareTo("professor") == 0 ) {
+                    fetchAndSendProfessorDataForm(res, uid, out, url);
+
+                } else {
+                    fetchAndSendUserDataForm(res, uid, out, url);
+                }
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -151,6 +164,77 @@ public class UserInfoForm  extends HttpServlet {
 
     }
 
+    private void fetchAndSendProfessorDataForm(HttpServletResponse res, Integer uid, PrintWriter out, StringBuffer url) throws NamingException, SQLException, IOException {
+        var conn = DatabaseConnection.getConnection();
+        var pstmt = conn.prepareStatement("SELECT " +
+                "id, name, email " +
+                "FROM accounts " +
+                "WHERE id = ?"
+        );
+
+        pstmt.setInt(1, uid);
+
+        pstmt.executeQuery();
+        var rs = pstmt.getResultSet();
+
+        if (rs.next()) {
+            var id = rs.getString(1);
+            var name = rs.getString(2);
+            var email = rs.getString(3);
+            String dept = null;
+
+            pstmt = conn.prepareStatement("SELECT " +
+                    "dept " +
+                    "FROM professors " +
+                    "WHERE employeeid = ?"
+            );
+
+            pstmt.setInt(1, uid);
+
+            pstmt.executeQuery();
+            rs = pstmt.getResultSet();
+            if (rs.next()) {
+                dept = rs.getString(1);
+            }
+            var templatePath = "/WEB-INF/resources/ProfessorInfoForm.html";
+            templatePath = getServletContext().getRealPath(templatePath);
+            try {
+
+                String template = new String(Files.readAllBytes(Paths.get(templatePath)));
+
+                Map<String, String> placeholders = new HashMap<>();
+                placeholders.put("id", id);
+                placeholders.put("name", name);
+                placeholders.put("email", email);
+                placeholders.put("dept", dept);
+
+                for(Map.Entry<String, String> entry : placeholders.entrySet()) {
+                    if (entry.getValue() == null) {
+                        entry.setValue("N/A");
+                    }
+                }
+
+                for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+                    template = template.replace("${" + entry.getKey() + "}", entry.getValue());
+                }
+                template = template.replace("${post-destination}", url);
+
+                out.println(template);
+            } catch (IOException e) {
+                System.out.println("failed to read file" + templatePath);
+                System.out.println(e.getMessage());
+                res.sendError(500);
+            }
+
+
+        } else {
+            out.println("no user data found");
+
+        }
+        conn.close();
+
+    }
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
         var out = resp.getWriter();
@@ -161,38 +245,92 @@ public class UserInfoForm  extends HttpServlet {
         if (session.getAttribute("userid") != null) {
             var uid = (Integer) session.getAttribute("userid");
             try {
-
-
-                var name = req.getParameter("name");
-                var email = req.getParameter("email");
-                var major = req.getParameter("major");
-
                 var conn = DatabaseConnection.getConnection();
-                var pstmt = conn.prepareStatement("UPDATE Accounts SET " +
-                        "name = ?, " +
-                        "email = ? " +
-                        "WHERE id = ?");
-
-                pstmt.setString(1, name);
-                pstmt.setString(2, email);
-                pstmt.setInt(3, uid);
-
-                pstmt.executeUpdate();
-
-                pstmt = conn.prepareStatement("UPDATE Students SET " +
-                        "major = ? " +
-                        "WHERE studentid = ?");
-                pstmt.setString(1, major);
-
-                pstmt.setInt(2, uid);
-
-                pstmt.executeUpdate();
-
-
-                // sending the same form again so that they see the updated changes
-                fetchAndSendUserDataForm(resp, uid, out, url);
-
+                var stmt = conn.prepareStatement("SELECT account_type FROM accounts where id = ?");
+                stmt.setInt(1, uid);
+                stmt.executeQuery();
+                var rs = stmt.getResultSet();
+                rs.next();
+                var acctype = rs.getString(1);
                 conn.close();
+
+                if (acctype.compareTo("professor") == 0 ) {
+
+
+                    var name = req.getParameter("name");
+                    var email = req.getParameter("email");
+                    var dept = req.getParameter("dept");
+
+                    conn = DatabaseConnection.getConnection();
+                    conn.setAutoCommit(false);
+                    var pstmt = conn.prepareStatement("UPDATE Accounts SET " +
+                            "name = ?, " +
+                            "email = ? " +
+                            "WHERE id = ?");
+
+                    pstmt.setString(1, name);
+                    pstmt.setString(2, email);
+                    pstmt.setInt(3, uid);
+
+                    pstmt.executeUpdate();
+
+                    pstmt = conn.prepareStatement("UPDATE Professors SET " +
+                            "dept = ? " +
+                            "WHERE employeeid = ?");
+                    pstmt.setString(1, dept);
+
+                    pstmt.setInt(2, uid);
+
+                    try {
+                        pstmt.executeUpdate();
+                    } catch (Exception e ) {
+                        conn.rollback();
+                        conn.close();
+                        fetchAndSendProfessorDataForm(resp, uid, out, url);
+                        out.println("Invalid department");
+                        return;
+                    }
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                    // sending the same form again so that they see the updated changes
+                    fetchAndSendProfessorDataForm(resp, uid, out, url);
+
+                    conn.close();
+
+                } else {
+
+                    var name = req.getParameter("name");
+                    var email = req.getParameter("email");
+                    var major = req.getParameter("major");
+
+                    conn = DatabaseConnection.getConnection();
+                    var pstmt = conn.prepareStatement("UPDATE Accounts SET " +
+                            "name = ?, " +
+                            "email = ? " +
+                            "WHERE id = ?");
+
+                    pstmt.setString(1, name);
+                    pstmt.setString(2, email);
+                    pstmt.setInt(3, uid);
+
+                    pstmt.executeUpdate();
+
+                    pstmt = conn.prepareStatement("UPDATE Students SET " +
+                            "major = ? " +
+                            "WHERE studentid = ?");
+                    pstmt.setString(1, major);
+
+                    pstmt.setInt(2, uid);
+
+                    pstmt.executeUpdate();
+
+
+                    // sending the same form again so that they see the updated changes
+                    fetchAndSendUserDataForm(resp, uid, out, url);
+
+                    conn.close();
+                }
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 out.println("ERROR in backend");

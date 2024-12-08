@@ -36,16 +36,16 @@ INSERT INTO courses VALUES ('149', 'CMPE', 'Operating Systems', 'Explore the des
 INSERT INTO sessions VALUES (default, to_date('7/15/2024', 'MM/DD/YYYY'), to_date('12/30/2024', 'MM/DD/YYYY'), 'FALL');
 
 -- Add a default teacher
-INSERT INTO accounts VALUES (default, 'Smith', 'smith@school.edu', crypt('12345qwert', gen_salt('bf')));
-INSERT INTO accounts VALUES (default, 'Johnson', 'johnson@school.edu', crypt('12345qwert', gen_salt('bf')));
-INSERT INTO accounts VALUES (default, 'Garcia', 'garcia@school.edu', crypt('12345qwert', gen_salt('bf')));
-INSERT INTO accounts VALUES (default, 'Wilson', 'wilson@school.edu', crypt('12345qwert', gen_salt('bf')));
-INSERT INTO accounts VALUES (default, 'Brown', 'brown@school.edu', crypt('12345qwert', gen_salt('bf')));
-INSERT INTO accounts VALUES (default, 'Jones', 'jones@school.edu', crypt('12345qwert', gen_salt('bf')));
-INSERT INTO accounts VALUES (default, 'Miller', 'miller@school.edu', crypt('12345qwert', gen_salt('bf')));
-INSERT INTO accounts VALUES (default, 'Davis', 'davis@school.edu', crypt('12345qwert', gen_salt('bf')));
-INSERT INTO accounts VALUES (default, 'Martinez', 'martinez@school.edu', crypt('12345qwert', gen_salt('bf')));
-INSERT INTO accounts VALUES (default, 'Williams', 'williams@school.edu', crypt('12345qwert', gen_salt('bf')));
+INSERT INTO accounts VALUES (default, 'Smith', 'smith@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
+INSERT INTO accounts VALUES (default, 'Johnson', 'johnson@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
+INSERT INTO accounts VALUES (default, 'Garcia', 'garcia@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
+INSERT INTO accounts VALUES (default, 'Wilson', 'wilson@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
+INSERT INTO accounts VALUES (default, 'Brown', 'brown@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
+INSERT INTO accounts VALUES (default, 'Jones', 'jones@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
+INSERT INTO accounts VALUES (default, 'Miller', 'miller@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
+INSERT INTO accounts VALUES (default, 'Davis', 'davis@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
+INSERT INTO accounts VALUES (default, 'Martinez', 'martinez@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
+INSERT INTO accounts VALUES (default, 'Williams', 'williams@school.edu', crypt('12345qwert', gen_salt('bf')), 'professor');
 
 INSERT INTO professors VALUES ((SELECT id FROM accounts WHERE name = 'Smith'), 'ISE');
 INSERT INTO professors VALUES ((SELECT id FROM accounts WHERE name = 'Johnson'), 'CMPE');
