@@ -160,6 +160,5 @@ INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Evelyn'), 'S
 INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'William'), 'Business Administration');
 INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Elizabeth'), 'Marketing');
 
-
-
+SELECT generate_enrollments(5, 10);
 

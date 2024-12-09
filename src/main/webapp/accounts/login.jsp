@@ -16,7 +16,8 @@
         Sign in
     </h1>
 </div>
-
+<div class="index-page-content">
+    <div class="center-box">
 <form hx-post="${pageContext.request.contextPath}/api/accounts/login"
       hx-swap="innerHTML"
       hx-target="#account-error"
@@ -34,6 +35,8 @@
     <button type="submit">Login</button>
 </form>
 <div id="account-error">
+</div>
+    </div>
 </div>
 
 </body>

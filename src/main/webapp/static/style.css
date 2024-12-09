@@ -184,4 +184,39 @@ td, th {
     text-decoration: underline;
 }
 
+.index-page-content{
+    padding-top: 30px;
+    display:flex;
+    justify-content: center;
+
+}
+.center-box {
+    background-color:white;
+    min-width: 300px;
+    min-height: 200px;
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: space-between;
+    padding: 25px;
+    border: 2px solid black;
+    border-radius:20px;
+}
+.center-box > div {
+    margin:auto;
+
+}
+.center-box > div a {
+    text-decoration:none;
+    color:black;
+    padding: 10px;
+    background-color: #e8e8e8;
+    border: 2px solid black ;
+    border-radius: 5px;
+}
+.center-box > div a:hover {
+    cursor:pointer;
+    background-color: #d7d7d7;
+}
+
 

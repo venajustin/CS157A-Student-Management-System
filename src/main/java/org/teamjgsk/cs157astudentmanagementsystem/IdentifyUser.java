@@ -51,10 +51,10 @@ public class IdentifyUser extends HttpServlet {
 
                     System.out.println("user not logged in");
 
-                    out.println("<H2 hx-trigger=\"load\" hx-get=\"/api/identify\">\n" +
-                           "<a href=\"" + url +  "/accounts/signup.jsp\">signup</a> <br>\n" +
-                           "<a href=\"" + url + "/accounts/login.jsp\">login</a>\n" +
-                           "</H2>");
+                    out.println("<div class=\"center-box\" hx-get=\"${pageContext.request.contextPath}/api/identify\" hx-trigger=\"load\">\n" +
+                           "<div><a href=\"" + url +  "/accounts/signup.jsp\">signup</a> </div>\n" +
+                           "<div><a href=\"" + url + "/accounts/login.jsp\">login</a></div>\n" +
+                           "</div>");
                 }
 
                 conn.close();
@@ -68,10 +68,10 @@ public class IdentifyUser extends HttpServlet {
 
             System.out.println("user not logged in");
 
-            out.println("<H2 hx-trigger=\"load\" hx-get=\"/api/identify\">\n" +
-                    "<a href=\"" + url +  "/accounts/signup.jsp\">signup</a> <br>\n" +
-                    "<a href=\"" + url + "/accounts/login.jsp\">login</a>\n" +
-                    "</H2>");
+            out.println("<div class=\"center-box\" hx-get=\"${pageContext.request.contextPath}/api/identify\" hx-trigger=\"load\">\n" +
+                    "<div><a href=\"" + url +  "/accounts/signup.jsp\">signup</a></div> <br>\n" +
+                    "<div><a href=\"" + url + "/accounts/login.jsp\">login</a></div>\n" +
+                    "</div>");
         }
     }
 }

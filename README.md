@@ -31,11 +31,12 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
         1. Open powershell or some cmd prompt.
       2. Execute `psql -U postgres`, enter the password assigned at install
       3. Execute this and set the password to **something other than your postgres user password**
-      `CREATE USER smsdeveloper WITH PASSWORD '<password>' `
-      4. Create the database for this project with `CREATE DATABASE smsdb WITH OWNER smsdeveloper`.
+      `CREATE USER smsdeveloper WITH PASSWORD '<password>;' `
+      4. Create the database for this project with `CREATE DATABASE smsdb WITH OWNER smsdeveloper;`.
       5. Exit the psql console with `\q`
       6. Log in as the new user with `psql -U smsdeveloper -d smsdb`
-      7. Copy and paste the test table creation scripts found in `utility/createdb.sql`. You can probably copy and paste the entire file and then press enter to run the last one. You will get a result of a single row looking something like `1 | <current time>`.
+      7. Run database schema creation scripts found in `create_schema.sql`. You can either copy and paste this file into the console, or run it through a database connection tool in your ide.
+      8. Run example data scripts found in `initialize_data.sql`. All student and professor accounts added here will have a password set to `12345qwert`. You can use this to log into their accounts.
 4. Clone this repo somewhere (not inside of Tomcat folder)
 5. On visual studio code, install two extensions
    1. **Extension Pack for Java** from Microsoft
@@ -77,8 +78,8 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
         />
     </Context>
     ```
-8. In the visual studio code console run `./mvnw clean compile install`
-9. Under the `SERVERS` tab, the Community Server Connector can be set up.
+8. From a console in the root of this repo, run the following `./mvnw clean compile install` which will compile the project with maven.
+9. Under the `SERVERS` tab of visual studio ( located in the bottom left ), the Community Server Connector can be set up.
     1. Right click `Community Server Connector` and select `Create New Server...`
    2. Choose `No, use server on disk`
    3. Navigate to the location of your Apache Tomcat installation
@@ -90,3 +91,29 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
 13. To update changes the easiest way is through two steps
     1. Run `./mvnw clean compile install` in the command line
     2. Right-click the tomcat server under `SERVERS` menu and click `Restart in Run Mode`
+    
+### Testing Features
+To see the application working with the example data we can log in as example students or professors. All example accounts
+are created with an email of `<name>@school.edu` and a password of `12345qwert`. So we could log in as
+student Benjamin with `benjamin@school.edu` and `12345qwert` or professor Smith with `smith@school.edu` and `12345qwert`
+
+If we log into the system as professor Smith, we can go to the current schedule page from 
+the navigation bar on the left side of the screen. On this page, all the sections that Smith
+teaches are displayed. We can select a section to view enrolled students with the form below
+the table. Then, a student's grade can be updated for that class by entering their student id
+and the new grade on a scale of 0 to 4. 
+
+The `initialize_data.sql` file will populate the student enrollments and grades randomly, so 
+a random set of students will be on this list. We can validate that their grade was changed
+successfully by logging out of Professor Smith's account in the top right corner of the page.
+Then we can log back in as `<student>@school.edu` and go to the current schedule page again.
+
+Here, the student's class will be displayed, along with their current grade.
+From the student account, we can go to the home page and update their account info such as their major.
+( This is available for Professors as well ) We can go to the class search page to view all departments, classes, 
+and their available sections. This page is the same for both students and professors,
+however students have the option to enroll in a section from this page.
+
+Professor accounts have access to an aditional page, which allows them to add classes and
+sections. They can add a class to any available department, and can add sections to any classes.
+The professor that adds a section will be set as the instructor of that section.

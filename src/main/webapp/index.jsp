@@ -13,10 +13,13 @@
     <div id="page-container">
 <%--        <%@ include file="sidebar.jsp"%>--%>
         <div id="content">
-            <H2 hx-get="${pageContext.request.contextPath}/api/identify" hx-trigger="load" >
-                <a href="${pageContext.request.contextPath}/accounts/signup.jsp">signup</a> <br>
-                <a href="${pageContext.request.contextPath}/accounts/login.jsp">login</a>
-            </H2>
+            <div class="index-page-content" hx-get="${pageContext.request.contextPath}/api/identify" hx-trigger="load" >
+                <div class="center-box">
+                    <a href="${pageContext.request.contextPath}/accounts/signup.jsp">signup</a> <br>
+                    <a href="${pageContext.request.contextPath}/accounts/login.jsp">login</a>
+                </div>
+
+            </div>
 
         </div>
     </div>
