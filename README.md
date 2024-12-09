@@ -31,7 +31,7 @@ Instructions are listed here for Microsoft Windows 11, similar steps should work
         1. Open powershell or some cmd prompt.
       2. Execute `psql -U postgres`, enter the password assigned at install
       3. Execute this and set the password to **something other than your postgres user password**
-      `CREATE USER smsdeveloper WITH PASSWORD '<password>' CREATEDB CREATEUSER`
+      `CREATE USER smsdeveloper WITH PASSWORD '<password>' `
       4. Create the database for this project with `CREATE DATABASE smsdb WITH OWNER smsdeveloper`.
       5. Exit the psql console with `\q`
       6. Log in as the new user with `psql -U smsdeveloper -d smsdb`
