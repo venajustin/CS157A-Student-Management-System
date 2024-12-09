@@ -105,3 +105,61 @@ INSERT INTO sections VALUES (default, 'CMPE', 144, current_session(), 'TR', '08:
 INSERT INTO sections VALUES (default, 'CMPE', 144, current_session(), 'F', '09:00:00', '12:00:00', (SELECT id from accounts where name LIKE 'Garcia'));
 INSERT INTO sections VALUES (default, 'CMPE', 149, current_session(), 'TR', '09:00:00', '10:30:00', (SELECT id from accounts where name LIKE 'Johnson'));
 INSERT INTO sections VALUES (default, 'CMPE', 149, current_session(), 'TR', '10:30:00', '12:00:00', (SELECT id from accounts where name LIKE 'Johnson'));
+
+
+-- Populate Students
+INSERT INTO accounts VALUES (default, 'Henry', 'henry@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Veronica', 'veronica@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Emma', 'emma@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Olivia', 'olivia@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Noah', 'noah@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Sophia', 'sophia@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Liam', 'liam@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Isabella', 'isabella@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Ethan', 'ethan@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Charlotte', 'charlotte@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Mia', 'mia@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Lucas', 'lucas@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Benjamin', 'benjamin@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Amelia', 'amelia@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Harper', 'harper@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Emily', 'emily@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Michael', 'michael@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Elijah', 'elijah@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Grace', 'grace@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Daniel', 'daniel@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Abigail', 'abigail@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Oliver', 'oliver@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Evelyn', 'evelyn@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'William', 'william@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+INSERT INTO accounts VALUES (default, 'Elizabeth', 'elizabeth@school.edu', crypt('12345qwert', gen_salt('bf')), 'student');
+
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Henry'), 'Software Engineering');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Veronica'), 'Computer Science');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Emma'), 'Math');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Olivia'), 'Computer Science');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Noah'), 'Computer Science');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Sophia'), 'Physics');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Liam'), 'Software Engineering');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Isabella'), 'Biology');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Ethan'), 'Electrical Engineering');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Charlotte'), 'Math');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Mia'), 'History');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Lucas'), 'Economics');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Benjamin'), 'Mechanical Engineering');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Amelia'), 'Art');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Harper'), 'Chemistry');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Emily'), 'Political Science');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Michael'), 'Philosophy');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Elijah'), 'Data Science');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Grace'), 'Environmental Science');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Daniel'), 'Civil Engineering');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Abigail'), 'Nursing');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Oliver'), 'Psychology');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Evelyn'), 'Statistics');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'William'), 'Business Administration');
+INSERT INTO students VALUES ((SELECT id FROM accounts WHERE name = 'Elizabeth'), 'Marketing');
+
+
+
+

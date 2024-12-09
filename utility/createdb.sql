@@ -135,39 +135,6 @@ CREATE TABLE Enrollments (
 );
 
 
--- DEPRECIATED for accounts table
------------------------------------------------------------------
--- -- Accounts view is used for all signup/login purposes
--- CREATE VIEW Accounts AS
---     SELECT
---         studentid AS id, name AS name, email, password, 'student' AS account_type
---         FROM students
---     UNION
---     SELECT
---         employeeId AS id, name AS name, email, password, 'professor' AS account_type
---         FROM professors;
---
---  CREATE OR REPLACE FUNCTION new_account () RETURNS TRIGGER
---      AS $$
---      BEGIN
---          IF NEW.account_type = 'student' THEN
---             INSERT INTO Students (name, email, password) VALUES
---                                  (NEW.name, NEW.email, crypt(NEW.password, gen_salt('bf')));
---         END IF;
---         IF NEW.account_type = 'professor' THEN
---             INSERT INTO Professors (name, email, password) VALUES
---                 (NEW.name, NEW.email, crypt(NEW.password, gen_salt('bf')));
---         END IF;
---         RETURN NEW;
---     END;
---     $$ LANGUAGE plpgsql;
---
--- CREATE TRIGGER t_acc_insert
---     INSTEAD OF INSERT ON Accounts
---     FOR EACH ROW
---     EXECUTE FUNCTION new_account();
-
-
 CREATE FUNCTION grade_letter ( grade REAL )
     RETURNS CHAR(2)
     AS $$
