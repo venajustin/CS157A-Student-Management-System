@@ -2,12 +2,23 @@
 ### Project for CS157A Introduction to Database Management Systems - Fall 2024
 <hr>
 
+### Overview:
+This project is a simple webapp that emulates a simple course and 
+student enrollment management system. Students and Professors can manage their accounts and 
+perform actions to manage the courses they are taking/teaching.
+
 ### Tools used:
 - Apache Tomcat webserver
 - Maven build system
 - Jakarta EE package
 - Postgresql
 - HTMX frontend javascript library
+
+### Dependencies:
+- Apache Tomcat
+- Java Development Kit 23
+- Postgresql and Postgres JDBC Driver
+- Maven Build Tools ( Included in Visual Studio Extention Pack for Java)
 
 ## Setup:
 Instructions are listed here for Microsoft Windows 11, similar steps should work on other platforms.
